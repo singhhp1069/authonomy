@@ -1,0 +1,387 @@
+definitions:
+  models.AppDetails:
+    properties:
+      description:
+        maxLength: 500
+        minLength: 10
+        type: string
+      email:
+        type: string
+    required:
+    - description
+    - email
+    type: object
+  models.ApplicationPolicyRequest:
+    properties:
+      application_did:
+        type: string
+      credential:
+        additionalProperties: true
+        type: object
+      issuer_did:
+        type: string
+      schema_id:
+        type: string
+    required:
+    - application_did
+    - credential
+    - issuer_did
+    - schema_id
+    type: object
+  models.ApplicationPolicyResponse:
+    properties:
+      application_did:
+        type: string
+      credential_id:
+        type: string
+      issuer_did:
+        type: string
+      schema_id:
+        type: string
+    type: object
+  models.ApplicationRequest:
+    properties:
+      app_details:
+        $ref: '#/definitions/models.AppDetails'
+      app_name:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - app_details
+    - app_name
+    type: object
+  models.ApplicationResponse:
+    properties:
+      app_details:
+        $ref: '#/definitions/models.AppDetails'
+      app_did:
+        type: string
+      app_name:
+        type: string
+    type: object
+  models.AuthProvider:
+    properties:
+      app_details:
+        $ref: '#/definitions/models.AvailableProvider'
+      app_did:
+        type: string
+      config:
+        $ref: '#/definitions/models.OAuthConfig'
+    required:
+    - app_details
+    - app_did
+    - config
+    type: object
+  models.AvailableProvider:
+    properties:
+      provider_name:
+        type: string
+      provider_protocol:
+        type: string
+      provider_type:
+        description: social, email, phone, etc
+        type: string
+    required:
+    - provider_name
+    - provider_protocol
+    - provider_type
+    type: object
+  models.Config:
+    properties:
+      app:
+        $ref: '#/definitions/models.ApplicationResponse'
+      auth:
+        $ref: '#/definitions/models.AuthProvider'
+      cred:
+        $ref: '#/definitions/models.ApplicationPolicyResponse'
+      sessionKey:
+        type: string
+    type: object
+  models.JsonSchema:
+    properties:
+      $schema:
+        type: string
+      properties:
+        additionalProperties: true
+        type: object
+      required:
+        items:
+          type: string
+        type: array
+      type:
+        type: string
+    type: object
+  models.OAuthConfig:
+    properties:
+      client_id:
+        type: string
+      redirect_url:
+        type: string
+    type: object
+  models.PolicySchemaRequest:
+    properties:
+      name:
+        type: string
+      schema:
+        $ref: '#/definitions/models.JsonSchema'
+    type: object
+  models.PolicySchemaResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      schema:
+        $ref: '#/definitions/models.JsonSchema'
+    type: object
+info:
+  contact: {}
+paths:
+  /application/{app_did}/config:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve the configuration for a specific application.
+      parameters:
+      - description: Application DID
+        in: path
+        name: app_did
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Configuration retrieved successfully
+          schema:
+            $ref: '#/definitions/models.Config'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "404":
+          description: Application not found
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get application configuration
+      tags:
+      - Application Management
+  /applications:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all applications
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ApplicationResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all applications
+      tags:
+      - Application Management
+    post:
+      consumes:
+      - application/json
+      description: Create a new application with the given details
+      parameters:
+      - description: Application to create
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/models.ApplicationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ApplicationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a new application
+      tags:
+      - Application Management
+  /attach-policy:
+    post:
+      consumes:
+      - application/json
+      description: Attaches a policy to an application using the provided application
+        and issuer DID, and schema ID
+      parameters:
+      - description: Application Policy Request
+        in: body
+        name: appPolicy
+        required: true
+        schema:
+          $ref: '#/definitions/models.ApplicationPolicyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully attached policy
+          schema:
+            $ref: '#/definitions/models.ApplicationPolicyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Attach policy to application
+      tags:
+      - Authorization Management
+  /auth-provider:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all auth providers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.AvailableProvider'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get available auth providers
+      tags:
+      - Authentication Management
+  /auth-provider/link:
+    post:
+      consumes:
+      - application/json
+      description: Links an OAuth provider to an application by its DID
+      parameters:
+      - description: Authentication Provider Details
+        in: body
+        name: provider
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthProvider'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully linked provider
+          schema:
+            $ref: '#/definitions/models.AuthProvider'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Link Authentication Provider
+      tags:
+      - Authentication Management
+  /auth-provider/unlink:
+    post:
+      consumes:
+      - application/json
+      description: Links an OAuth provider to an application by its DID
+      parameters:
+      - description: Authentication Provider Details
+        in: body
+        name: provider
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully linked provider
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: UnLink Authentication Provider
+      tags:
+      - Authentication Management
+  /create-policy:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new policy based on the provided schema
+      parameters:
+      - description: Policy Schema
+        in: body
+        name: schema
+        required: true
+        schema:
+          $ref: '#/definitions/models.PolicySchemaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created policy
+          schema:
+            $ref: '#/definitions/models.PolicySchemaResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a new policy
+      tags:
+      - Authorization Management
+  /policies:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all policies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.PolicySchemaResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all policies
+      tags:
+      - Authorization Management
+swagger: "2.0"

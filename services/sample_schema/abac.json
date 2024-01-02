@@ -1,0 +1,49 @@
+{
+    "name": "ABAC Policy",
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "credentialSubject": {
+          "type": "object",
+          "properties": {
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ruleId": {
+                    "type": "string"
+                  },
+                  "subjectAttributes": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "actionAttributes": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "resourceAttributes": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "effect": {
+                    "type": "string",
+                    "enum": ["permit", "deny"]
+                  }
+                },
+                "required": ["ruleId", "subjectAttributes", "actionAttributes", "resourceAttributes", "effect"]
+              }
+            }
+          },
+          "required": ["rules"]
+        }
+      }
+    }
+  }

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Credential</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            max-width: 500px;
+            margin-top: 80px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn-custom {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn-issue {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Profile Details</h5>
+                <p class="card-text" id="userInfo">Loading...</p>
+                <button class="btn btn-custom btn-issue" onclick="issueCredential()">Issue</button>
+                <button class="btn btn-custom btn-cancel" onclick="cancel()">Cancel</button>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2023 My Application</p>
+        </div>
+    </div>
+
+    <!-- Include JavaScript and Bootstrap dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        let userInfoGlobal = {};
+        document.addEventListener("DOMContentLoaded", function () {
+            // Extract the `did` from the query parameters
+            var queryParams = new URLSearchParams(window.location.search);
+            var did = queryParams.get('did');
+            var provider = queryParams.get('provider');
+            console.log('DID:', did);
+            console.log('provider:', provider);
+            // Extract the fragment (after #) and parse it
+            var hash = window.location.hash.substr(1);
+            var fragmentParams = new URLSearchParams(hash);
+            var accessToken = fragmentParams.get('access_token');
+            var data_access_expiration_time = fragmentParams.get('data_access_expiration_time');
+            // expires_in
+            // long_lived_token
+
+            // Log the values or handle them as needed
+            console.log('Access Token:', accessToken);
+            console.log('Expire Time:', data_access_expiration_time);
+            fetchUserInfo(provider, accessToken); // Implement this function to fetch user info
+        });
+
+        function fetchUserInfo(provider, accessToken) {
+            // Assuming your server's /me endpoint is set up to accept GET requests with these query parameters
+            var url = '/me/' + provider + '/' + accessToken;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Assuming 'data' contains the user information
+                    var userInfo = 'Name: ' + data.name + '<br>' +
+                        'ID: ' + data.id + '<br>' +
+                        // ... include other user data fields as needed ...
+                        '';
+                    document.getElementById('userInfo').innerHTML = userInfo;
+                    userInfoGlobal = {
+                        user_id: data.id,
+                        name: data.name
+                    };
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                    document.getElementById('userInfo').innerText = 'Failed to load user info';
+                });
+        }
+
+        function issueCredential() {
+            // Extracting values from URL
+            var queryParams = new URLSearchParams(window.location.search);
+            var provider = queryParams.get('provider');
+            var did = queryParams.get('did');
+            var hash = window.location.hash.substr(1);
+            var fragmentParams = new URLSearchParams(hash);
+            var accessToken = fragmentParams.get('access_token');
+            // Prepare the request body
+            var requestBody = {
+                app_did: did,
+                provider: provider,
+                user_info: userInfoGlobal,
+                credential_type: "pkss"
+            };
+            fetch("/issue-credential", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(requestBody)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Credential Issued:', data);
+                    window.CloseWebView.postMessage(data);
+                })
+                .catch(error => {
+                    console.error('Issue credential error:', error);
+                    document.getElementById('credentialInfo').innerText = 'Failed to issue credential';
+                });
+        }
+        function cancel() {
+            window.CloseWebView.postMessage('Credential Issued');
+            // Call the endpoint to cancel
+            // Example: window.location.href = '/cancel-endpoint';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+*.dll
+*.dylib
+
+# Folders
+_obj
+_test
+
+# Architecture specific extensions/prefixes
+*.[568vq]
+[568vq].out
+
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+
+_testmain.go
+
+*.exe
+*.test
+*.prof
+
+# GoLand files
+.idea/
+.vscode/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Binary builds
+/bin/
+/build/
+
+
+# Logs and databases
+*.log
+*.sqlite
+
+# Env files
+.env
+
+# Firebase
+*.credentials.json
+
+# GraphQL generated files (depends on your project setup)
+**/generated.go
+
+# Vendor directory (if not using Go modules)
+vendor/
+
+# Go module cached directory
+pkg/mod/
+coverage.txt
+
+# DB path
+badger_db

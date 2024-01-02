@@ -1,0 +1,27 @@
+{
+    "name": "Oauth user info",
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "credentialSubject": {
+          "type": "object",
+          "properties":{
+            "user_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "user_id",
+            "name"
+          ]
+        }
+      }
+    }
+  }

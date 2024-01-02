@@ -1,0 +1,82 @@
+curl -X PUT localhost:8080/v1/credentials -d '{
+  "issuer": "did:key:issuer-did",
+  "verificationMethodId": "did:key:issuer-did#issuer-key",
+  "subject": "did:example:user123",
+  "schemaId": "abac-schema-id",
+  "data": {
+    "credentialSubject": {
+      "rules": [
+        {
+          "ruleId": "rule-1",
+          "subjectAttributes": {
+            "role": "manager",
+            "department": "finance"
+          },
+          "actionAttributes": {
+            "action": "approve",
+            "resourceType": "expenseReport"
+          },
+          "resourceAttributes": {
+            "resourceOwnerDepartment": "finance"
+          },
+          "effect": "permit"
+        },
+        {
+          "ruleId": "rule-2",
+          "subjectAttributes": {
+            "role": "employee"
+          },
+          "actionAttributes": {
+            "action": "submit",
+            "resourceType": "expenseReport"
+          },
+          "resourceAttributes": {
+            "resourceOwnerDepartment": "any"
+          },
+          "effect": "permit"
+        }
+      ]
+    }
+  }
+}'
+
+
+curl -X PUT localhost:8080/v1/credentials -d '{
+  "issuer": "did:key:issuer-did",
+  "verificationMethodId": "did:key:issuer-did#issuer-key",
+  "subject": "did:example:user123",
+  "schemaId": "rbac-schema-id",
+  "data": {
+    "credentialSubject": {
+      "roles": [
+        {
+          "roleName": "admin",
+          "permissions": ["create_user", "delete_user", "edit_settings"]
+        },
+        {
+          "roleName": "user",
+          "permissions": ["view_content", "comment"]
+        }
+      ]
+    }
+  }
+}'
+
+
+{
+  "application_did": "did:key:z6MkkdBjnuvU3eM6vWcCaVntGcjuon1RZbfG7cpWknsnAuh1",
+  "credential": {
+      "roles": [
+        {
+          "roleName": "admin",
+          "permissions": ["create_user", "delete_user", "edit_settings"]
+        },
+        {
+          "roleName": "user",
+          "permissions": ["view_content", "comment"]
+        }
+      ]
+    },
+  "issuer_did": "did:key:z6MkfWU56TQ1UW7J32CwUD5eyx93s7mN2nVPE43TAH5ge9FD",
+  "schema_id": "350f8e00-7804-419b-aa65-0ad9298befcc"
+}
