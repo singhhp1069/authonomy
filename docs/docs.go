@@ -357,6 +357,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/issue-credential": {
+            "post": {
+                "description": "Issue a new OAuth credential for a user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication Management"
+                ],
+                "summary": "Issue OAuth Credential",
+                "parameters": [
+                    {
+                        "description": "Issue Credential Request",
+                        "name": "issueOAuthCredentialRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.IssueOAuthCredentialRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Credential successfully issued",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/policies": {
             "get": {
                 "description": "Retrieves a list of all policies",
@@ -382,6 +428,164 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/revoke-credential": {
+            "post": {
+                "description": "Revoke an existing OAuth credential.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication Management"
+                ],
+                "summary": "Revoke OAuth Credential",
+                "parameters": [
+                    {
+                        "description": "Revoke Credential Request",
+                        "name": "revokeOAuthCredentialRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Credential successfully revoked",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sign-in": {
+            "get": {
+                "description": "Handles the sign-in process using application DID, credential JWT, and session key.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Sign in to an application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application DID",
+                        "name": "app_did",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Credential JWT",
+                        "name": "cred_jwt",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Session Key",
+                        "name": "session_key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Access Token",
+                        "schema": {
+                            "$ref": "#/definitions/models.SignInResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/signup": {
+            "get": {
+                "description": "Handles the sign-up process by providing a redirect URL for authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Sign up for an application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application DID",
+                        "name": "app_did",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Session Token",
+                        "name": "session_token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Redirect URL for sign-up",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
                         "schema": {
                             "type": "string"
                         }
@@ -536,6 +740,29 @@ const docTemplate = `{
                 }
             }
         },
+        "models.IssueOAuthCredentialRequest": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "app_did",
+                "provider",
+                "user_did"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "app_did": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "user_did": {
+                    "type": "string"
+                }
+            }
+        },
         "models.JsonSchema": {
             "type": "object",
             "properties": {
@@ -590,6 +817,14 @@ const docTemplate = `{
                 },
                 "schema": {
                     "$ref": "#/definitions/models.JsonSchema"
+                }
+            }
+        },
+        "models.SignInResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
                 }
             }
         }

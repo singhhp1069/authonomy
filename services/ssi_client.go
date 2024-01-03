@@ -48,13 +48,12 @@ func CreateDemoPolicies(client *SsiClient, db *store.Store) error {
 	db.SetPolicy(policy)
 
 	// set OAuth2 user info schema
-	policy, err = client.createPolicyFromFile(filepath.Join(path, "services", "sample_schema", "oauth_info.json.json"), db)
+	policy, err = client.createPolicyFromFile(filepath.Join(path, "services", "sample_schema", "oauth_info.json"), db)
 	if err != nil {
 		return fmt.Errorf("error creating policy from file %v", err)
 	}
 	// only facebook is supported yet for the demo
-	db.SetProviderSchema(models.ProviderSchema{ProviderName: "facebook", SchemaID: policy.ID})
-	return nil
+	return db.SetProviderSchema(models.ProviderSchema{ProviderName: "facebook", SchemaID: policy.ID})
 }
 
 func (client *SsiClient) createPolicyFromFile(filePath string, db *store.Store) (schemaRep models.PolicySchemaResponse, err error) {
@@ -146,7 +145,6 @@ func (client *SsiClient) IssueCredentialBySchemaID(issuer, subject, schemaID str
 		SchemaID:             schemaID,
 		Data:                 data,
 	}
-
 	requestBody, err := json.Marshal(credRequest)
 	if err != nil {
 		return cred, err
@@ -163,7 +161,6 @@ func (client *SsiClient) IssueCredentialBySchemaID(issuer, subject, schemaID str
 		return cred, err
 	}
 	defer resp.Body.Close()
-
 	if resp.StatusCode != http.StatusCreated {
 		return cred, fmt.Errorf("failed to issue credential, status code: %d", resp.StatusCode)
 	}
@@ -175,6 +172,36 @@ func (client *SsiClient) IssueCredentialBySchemaID(issuer, subject, schemaID str
 
 	return credentialResp, nil
 }
+
+// // VerifyCredential verifies a credential JWT and returns the verification result
+// func (client *SsiClient) VerifyCredential(credentialJWT string) (models.VerificationResponse, error) {
+// 	// Prepare the request body
+// 	requestBody, err := json.Marshal(map[string]string{"credentialJwt": credentialJWT})
+// 	if err != nil {
+// 		return models.VerificationResponse{}, err
+// 	}
+
+// 	// Create and send the request
+// 	req, err := http.NewRequest("PUT", SSI_BASE_URL+"/credentials/verification", bytes.NewBuffer(requestBody))
+// 	if err != nil {
+// 		return models.VerificationResponse{}, err
+// 	}
+// 	req.Header.Set("Content-Type", "application/json")
+
+// 	resp, err := client.httpClient.Do(req)
+// 	if err != nil {
+// 		return models.VerificationResponse{}, err
+// 	}
+// 	defer resp.Body.Close()
+
+// 	// Decode the response
+// 	var verificationResp models.VerificationResponse
+// 	if err := json.NewDecoder(resp.Body).Decode(&verificationResp); err != nil {
+// 		return models.VerificationResponse{}, err
+// 	}
+
+// 	return verificationResp, nil
+// }
 
 // IsSchemaExists checks if a schema exists
 func (client *SsiClient) IsSchemaExists(schema string) bool {

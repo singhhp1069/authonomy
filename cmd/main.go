@@ -33,10 +33,11 @@ func Start() {
 	// }
 	// Initialize handlers with services
 	appHandler := handlers.NewAppHandler(ssiService, store)
-	authHandler := handlers.NewAuthHandler(ssiService, store)
+	authProviderHandler := handlers.NewAuthProviderHandler(ssiService, store)
 	policyHandler := handlers.NewPolicyHandler(ssiService, store)
 	callbackHandler := handlers.NewCallbackHandler()
 	credentialHandler := handlers.NewCredentialHandler(ssiService, store)
+	authHandler := handlers.NewAuthHandler(ssiService, store)
 	// Swagger endpoint
 	url := httpSwagger.URL("http://localhost:8081/swagger/doc.json") // The url pointing to API definition
 	http.Handle("/swagger/", httpSwagger.Handler(
@@ -45,16 +46,24 @@ func Start() {
 	// Set up routes
 	http.HandleFunc("/applications", handlers.ChainMiddleware(appHandler.HandleApplications, handlers.EnableCORS, handlers.LoggingMiddleware))
 	http.HandleFunc("/application/", appHandler.GetConfig)
-	http.HandleFunc("/auth-provider", handlers.EnableCORS(authHandler.GetAuthConnectorHandler))
-	http.HandleFunc("/auth-provider/link", handlers.EnableCORS(authHandler.LinkAuthProviderHandler))
-	http.HandleFunc("/auth-provider/unlink", handlers.EnableCORS(authHandler.UnLinkAuthProviderHandler))
+	http.HandleFunc("/auth-provider", handlers.EnableCORS(authProviderHandler.GetAuthConnectorHandler))
+	http.HandleFunc("/auth-provider/link", handlers.EnableCORS(authProviderHandler.LinkAuthProviderHandler))
+	http.HandleFunc("/auth-provider/unlink", handlers.EnableCORS(authProviderHandler.UnLinkAuthProviderHandler))
 	http.HandleFunc("/policies", handlers.EnableCORS(policyHandler.GetPolicyHandler))
 	http.HandleFunc("/create-policy", handlers.EnableCORS(policyHandler.CreatePolicyHandler))
 	http.HandleFunc("/attach-policy", handlers.EnableCORS(policyHandler.AttachPolicyHandler))
 	http.HandleFunc("/callback/", callbackHandler.HandleCallback)
 	http.HandleFunc("/me/", callbackHandler.HandleMe)
+
 	http.HandleFunc("/issue-credential", credentialHandler.IssueOAuthCredential)
 	http.HandleFunc("/revoke-credential", credentialHandler.RevokeOAuthCredential)
+
+	http.HandleFunc("/signup", authHandler.SignUpHandler)
+	http.HandleFunc("/signin", authHandler.SignInHandler)
+
+	http.HandleFunc("/validate-access", authHandler.VerifyAccess)
+	http.HandleFunc("/grant-access", authHandler.GrandAccess)
+	http.HandleFunc("/revoke-access", authHandler.RevokeAccess)
 	// static web page for access_token
 	fs := http.FileServer(http.Dir("web"))
 	http.Handle("/web/", http.StripPrefix("/web/", fs))

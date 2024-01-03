@@ -98,6 +98,22 @@ definitions:
       sessionKey:
         type: string
     type: object
+  models.IssueOAuthCredentialRequest:
+    properties:
+      access_token:
+        type: string
+      app_did:
+        type: string
+      provider:
+        type: string
+      user_did:
+        type: string
+    required:
+    - access_token
+    - app_did
+    - provider
+    - user_did
+    type: object
   models.JsonSchema:
     properties:
       $schema:
@@ -134,6 +150,11 @@ definitions:
         type: string
       schema:
         $ref: '#/definitions/models.JsonSchema'
+    type: object
+  models.SignInResponse:
+    properties:
+      access_token:
+        type: string
     type: object
 info:
   contact: {}
@@ -363,6 +384,36 @@ paths:
       summary: Create a new policy
       tags:
       - Authorization Management
+  /issue-credential:
+    post:
+      consumes:
+      - application/json
+      description: Issue a new OAuth credential for a user.
+      parameters:
+      - description: Issue Credential Request
+        in: body
+        name: issueOAuthCredentialRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.IssueOAuthCredentialRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Credential successfully issued
+          schema:
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Issue OAuth Credential
+      tags:
+      - Authentication Management
   /policies:
     get:
       consumes:
@@ -384,4 +435,110 @@ paths:
       summary: Get all policies
       tags:
       - Authorization Management
+  /revoke-credential:
+    post:
+      consumes:
+      - application/json
+      description: Revoke an existing OAuth credential.
+      parameters:
+      - description: Revoke Credential Request
+        in: body
+        name: revokeOAuthCredentialRequest
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Credential successfully revoked
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Revoke OAuth Credential
+      tags:
+      - Authentication Management
+  /sign-in:
+    get:
+      consumes:
+      - application/json
+      description: Handles the sign-in process using application DID, credential JWT,
+        and session key.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Credential JWT
+        in: query
+        name: cred_jwt
+        required: true
+        type: string
+      - description: Session Key
+        in: query
+        name: session_key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Access Token
+          schema:
+            $ref: '#/definitions/models.SignInResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Sign in to an application
+      tags:
+      - User Access Management
+  /signup:
+    get:
+      consumes:
+      - application/json
+      description: Handles the sign-up process by providing a redirect URL for authentication.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Session Token
+        in: query
+        name: session_token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Redirect URL for sign-up
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Sign up for an application
+      tags:
+      - User Access Management
 swagger: "2.0"

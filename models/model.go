@@ -1,6 +1,8 @@
 package models
 
 import (
+	"encoding/json"
+
 	credsdk "github.com/TBD54566975/ssi-sdk/credential"
 	didsdk "github.com/TBD54566975/ssi-sdk/did"
 )
@@ -66,21 +68,10 @@ type CredentialRequest struct {
 }
 
 type CredentialResponse struct {
-	ID                                 string `json:"id"`
-	FullyQualifiedVerificationMethodID string `json:"fullyQualifiedVerificationMethodId"`
-	Credential                         struct {
-		Context           []string               `json:"@context"`
-		ID                string                 `json:"id"`
-		Type              []string               `json:"type"`
-		Issuer            string                 `json:"issuer"`
-		IssuanceDate      string                 `json:"issuanceDate"`
-		CredentialSubject map[string]interface{} `json:"credentialSubject"`
-		CredentialSchema  struct {
-			ID   string `json:"id"`
-			Type string `json:"type"`
-		} `json:"credentialSchema"`
-	} `json:"credential"`
-	CredentialJwt string `json:"credentialJwt"`
+	ID                                 string                        `json:"id"`
+	FullyQualifiedVerificationMethodID string                        `json:"fullyQualifiedVerificationMethodId"`
+	Credential                         *credsdk.VerifiableCredential `json:"credential,omitempty"`
+	CredentialJwt                      string                        `json:"credentialJwt"`
 }
 
 type AuthProvider struct {
@@ -118,11 +109,10 @@ type ProviderSchema struct {
 }
 
 type IssueOAuthCredentialRequest struct {
-	AppDID         string   `json:"app_did" validate:"required"`
-	Provider       string   `json:"provider" validate:"required"`
-	UserInfo       UserInfo `json:"user_info,omitempty"`
-	CredentialType string   `json:"credential_type" validate:"required"`
-	UserDID        string   `json:"user_did" validate:"required"`
+	AppDID      string `json:"app_did" validate:"required"`
+	Provider    string `json:"provider" validate:"required"`
+	AccessToken string `json:"access_token" validate:"required"`
+	UserDID     string `json:"user_did" validate:"required"`
 }
 
 type IssueOAuthCredentialResponse struct {
@@ -138,4 +128,49 @@ type UserInfo struct {
 	Name   string `json:"name" validate:"required"`
 	Email  string `json:"email"`
 	// more fields soon
+}
+
+type SignInResponse struct {
+	AccessToken string `json:"access_token"`
+}
+
+type GrantAccessRequest struct {
+	AccessToken   string                 `json:"access_token"`
+	PolicySubject map[string]interface{} `json:"policy_subject"`
+}
+
+type GrantAccessResponse struct {
+	AccessCredential CredentialResponse `json:"access_credential"`
+}
+
+type RevokeAccessRequest struct {
+	CredentialJWT string `json:"credential_jwt"`
+}
+
+type RevokeAccessResponse struct {
+	Status bool `json:"status"`
+}
+
+type VerifyAccessRequest struct {
+	CredentialJWT string `json:"credential_jwt"`
+}
+
+type VerifyAccessResponse struct {
+	Status bool `json:"status"`
+}
+
+func StructToMap(data interface{}) (map[string]interface{}, error) {
+	result := make(map[string]interface{})
+
+	dataBytes, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(dataBytes, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }

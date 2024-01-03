@@ -3,7 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"identitysphere-api/pkg/utils"
+	"identitysphere-api/pkg/providers"
 	"net/http"
 	"strings"
 )
@@ -51,7 +51,7 @@ func (r *CallbackHandler) HandleMe(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("provider", provider)
 	fmt.Println("accessToken", accessToken)
 
-	userInfo, err := getUserInfo(provider, accessToken)
+	userInfo, err := providers.GetUserInfo(provider, accessToken)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -59,24 +59,4 @@ func (r *CallbackHandler) HandleMe(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(userInfo)
-}
-
-func getUserInfo(provider, accessToken string) (interface{}, error) {
-	if provider != "facebook" {
-		// Handle other providers or return an error
-		return nil, fmt.Errorf("unsupported provider: %s", provider)
-	}
-	url := fmt.Sprintf("https://graph.facebook.com/v14.0/me?access_token=%s", accessToken)
-	fmt.Println("url is", url)
-	fmt.Println("provider is", provider)
-	fmt.Println("accessToken is", accessToken)
-	// Use SendHTTPRequest to make the API call
-	httpResponse, err := utils.SendHTTPRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	if httpResponse.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("API request failed with status code: %d", httpResponse.StatusCode)
-	}
-	return httpResponse.Body, nil
 }

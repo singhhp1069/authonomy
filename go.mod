@@ -5,7 +5,6 @@ go 1.21.4
 require (
 	github.com/TBD54566975/ssi-sdk v0.0.4-alpha
 	github.com/dgraph-io/badger/v3 v3.2103.5
-	github.com/fatih/structs v1.1.0
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/swaggo/http-swagger v1.3.4

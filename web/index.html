@@ -43,6 +43,12 @@
             color: white;
         }
 
+        .btn-create {
+            background-color: #80c011;
+            border-color: #11ea43;
+            color: white;
+        }
+
         .btn-cancel {
             background-color: #dc3545;
             border-color: #dc3545;
@@ -59,17 +65,26 @@
 </head>
 
 <body>
-    <div class="container">
+    <div id="loadingSection" style="display: none;">
+        <div class="text-center">
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <div id="profileSection" style="display: none;" class="container">
         <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title">Profile Details</h5>
                 <p class="card-text" id="userInfo">Loading...</p>
+                <input type="text" id="userDid" class="form-control mb-3" placeholder="Enter your DID">
+
                 <button class="btn btn-custom btn-issue" onclick="issueCredential()">Issue</button>
+                <button class="btn btn-custom btn-create" onclick="createDid()">Create DID</button>
                 <button class="btn btn-custom btn-cancel" onclick="cancel()">Cancel</button>
             </div>
         </div>
         <div class="footer">
-            <p>&copy; 2023 My Application</p>
+            <p>&copy; 2024 My Application</p>
         </div>
     </div>
 
@@ -80,26 +95,55 @@
     <script>
         let userInfoGlobal = {};
         document.addEventListener("DOMContentLoaded", function () {
-            // Extract the `did` from the query parameters
+            // Capture initial query parameters
             var queryParams = new URLSearchParams(window.location.search);
-            var did = queryParams.get('did');
-            var provider = queryParams.get('provider');
-            console.log('DID:', did);
-            console.log('provider:', provider);
-            // Extract the fragment (after #) and parse it
-            var hash = window.location.hash.substr(1);
-            var fragmentParams = new URLSearchParams(hash);
-            var accessToken = fragmentParams.get('access_token');
-            var data_access_expiration_time = fragmentParams.get('data_access_expiration_time');
-            // expires_in
-            // long_lived_token
+            var type = queryParams.get('type');
+            var appDid = queryParams.get('app_did');
+            var sessionToken = queryParams.get('session_token');
 
-            // Log the values or handle them as needed
-            console.log('Access Token:', accessToken);
-            console.log('Expire Time:', data_access_expiration_time);
-            fetchUserInfo(provider, accessToken); // Implement this function to fetch user info
+            if (type === 'login') {
+                showLoading(true);
+                // Make a request to the /signup endpoint
+                fetch('/signup?app_did=' + appDid + '&session_token=' + sessionToken)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Assuming 'data' contains the redirect URL
+                        window.location.href = data.redirect_url;
+                    })
+                    .catch(error => {
+                        console.error('Signup error:', error);
+                    });
+            } else {
+                showLoading(false);
+                // Existing logic for handling the callback
+                var provider = queryParams.get('provider');
+                var did = queryParams.get('did');
+                var hash = window.location.hash.substr(1);
+                var fragmentParams = new URLSearchParams(hash);
+                var accessToken = fragmentParams.get('access_token');
+                fetchUserInfo(provider, accessToken); // Implement this function to fetch user info
+            }
         });
 
+        function createDid() {
+    // Logic to create a DID
+    // For demonstration purposes, this will just log a message
+    console.log("Creating a new DID...");
+    // You can replace this with actual logic to create a DID
+    // and then update the input field with the new DID
+    var newDid = "did:key:exampleNewDid"; // This should be the actual new DID
+    document.getElementById('userDid').value = newDid;
+}
+
+        function showLoading(isLoading) {
+            document.getElementById('loadingSection').style.display = isLoading ? 'block' : 'none';
+            document.getElementById('profileSection').style.display = isLoading ? 'none' : 'block';
+        }
         function fetchUserInfo(provider, accessToken) {
             // Assuming your server's /me endpoint is set up to accept GET requests with these query parameters
             var url = '/me/' + provider + '/' + accessToken;
@@ -137,12 +181,14 @@
             var hash = window.location.hash.substr(1);
             var fragmentParams = new URLSearchParams(hash);
             var accessToken = fragmentParams.get('access_token');
+            var userDid = document.getElementById('userDid').value; // Get the DID from the input field
             // Prepare the request body
             var requestBody = {
                 app_did: did,
                 provider: provider,
-                user_info: userInfoGlobal,
-                credential_type: "pkss"
+                access_token: accessToken,
+                user_did: userDid
+                // credential_type: "json"
             };
             fetch("/issue-credential", {
                 method: "POST",

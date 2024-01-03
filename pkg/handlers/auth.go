@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"identitysphere-api/models"
+	"identitysphere-api/pkg/providers"
+	"identitysphere-api/pkg/utils"
 	"identitysphere-api/services"
 	"identitysphere-api/store"
 	"net/http"
@@ -20,99 +22,102 @@ func NewAuthHandler(ssiService *services.SsiClient, db *store.Store) *AuthHandle
 	return &AuthHandler{ssiService: ssiService, db: db}
 }
 
-// @Summary Get available auth providers
-// @Description Retrieves a list of all auth providers
-// @Tags Authentication Management
-// @Accept json
-// @Produce json
-// @Success 200 {array} models.AvailableProvider
-// @Failure 500 {object} string "Internal Server Error"
-// @Router /auth-provider [get]
-func (h *AuthHandler) GetAuthConnectorHandler(w http.ResponseWriter, r *http.Request) {
+// SignUpHandler godoc
+// @Summary Sign up for an application
+// @Description Handles the sign-up process by providing a redirect URL for authentication.
+// @Tags User Access Management
+// @Accept  json
+// @Produce  json
+// @Param app_did query string true "Application DID"
+// @Param session_token query string true "Session Token"
+// @Success 200 {object} map[string]string "Redirect URL for sign-up"
+// @Failure 400 {string} string "Bad request"
+// @Failure 500 {string} string "Internal server error"
+// @Router /signup [get]
+func (h *AuthHandler) SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Only GET method is allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	// hardcoded connector can be build to supported various mediums.
-	connectors := []models.AvailableProvider{
-		{
-			ProviderName:     "facebook",
-			ProviderType:     "social",
-			ProviderProtocol: "oauth2",
-		},
-	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(connectors)
-}
 
-// LinkAuthProviderHandler links an authentication provider to an application
-// @Summary Link Authentication Provider
-// @Description Links an OAuth provider to an application by its DID
-// @Tags Authentication Management
-// @Accept json
-// @Produce json
-// @Param provider body models.AuthProvider true "Authentication Provider Details"
-// @Success 200 {object} models.AuthProvider "Successfully linked provider"
-// @Failure 400 {string} string "Bad Request"
-// @Failure 500 {string} string "Internal Server Error"
-// @Router /auth-provider/link [post]
-func (h *AuthHandler) LinkAuthProviderHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "Only POST method is allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var provider models.AuthProvider
-	if err := json.NewDecoder(r.Body).Decode(&provider); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	isExist := h.ssiService.IsDIDExists(provider.AppDID)
-	if !isExist {
-		http.Error(w, "app DID does not exists id: "+provider.AppDID, http.StatusInternalServerError)
-		return
-	}
-	// hardcoded for the hackathon
-	if provider.Provider.ProviderName != "facebook" {
-		http.Error(w, "currently only facebook as a provider supported ", http.StatusInternalServerError)
-		return
-	}
-	provider.Config.RedirectURL = getCallbackUrl(r, provider.AppDID, provider.Provider.ProviderName)
-	// more secure way of storing can be applied (encryption)
-	err := h.db.SetAuthProvider(provider)
+	// Extract query parameters
+	queryParams := r.URL.Query()
+	appDid := queryParams.Get("app_did")
+	sessionToken := queryParams.Get("session_token")
+	fmt.Println("appDid", appDid)
+	fmt.Println("queryParams", queryParams)
+	auth, err := h.db.GetAuthProvider(appDid)
 	if err != nil {
-		http.Error(w, "Failed to save provide details "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "app authentication is not configured yet", http.StatusInternalServerError)
 		return
 	}
 
+	fmt.Println("authDetails", auth)
+	//  session todo validate
+
+	// For demonstration, let's just send back these parameters
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(provider)
+	response := map[string]string{
+		"app_did":       appDid,
+		"session_token": sessionToken,
+		"redirect_url":  providers.GetLoginUrl(auth.Config.ClientID, auth.Config.RedirectURL),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
-// LinkAuthProviderHandler links an authentication provider to an application
-// @Summary UnLink Authentication Provider
-// @Description Links an OAuth provider to an application by its DID
-// @Tags Authentication Management
-// @Accept json
-// @Produce json
-// @Param provider body interface{} true "Authentication Provider Details"
-// @Success 200 {object} interface{} "Successfully linked provider"
-// @Failure 400 {string} string "Bad Request"
-// @Failure 500 {string} string "Internal Server Error"
-// @Router /auth-provider/unlink [post]
-func (h *AuthHandler) UnLinkAuthProviderHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "Only POST method is allowed", http.StatusMethodNotAllowed)
+// SignInHandler godoc
+// @Summary Sign in to an application
+// @Description Handles the sign-in process using application DID, credential JWT, and session key.
+// @Tags User Access Management
+// @Accept  json
+// @Produce  json
+// @Param app_did query string true "Application DID"
+// @Param cred_jwt query string true "Credential JWT"
+// @Param session_key query string true "Session Key"
+// @Success 200 {object} models.SignInResponse "Access Token"
+// @Failure 400 {string} string "Bad request"
+// @Failure 500 {string} string "Internal server error"
+// @Router /sign-in [get]
+func (h *AuthHandler) SignInHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Only GET method is allowed", http.StatusMethodNotAllowed)
 		return
 	}
+	// Extract query parameters
+	queryParams := r.URL.Query()
+	appDid := queryParams.Get("app_did")
+	credJwt := queryParams.Get("cred_jwt")
+	sessionKey := queryParams.Get("session_key")
+
+	fmt.Println("App DID:", appDid)
+	fmt.Println("Credential JWT:", credJwt)
+	fmt.Println("Session Key:", sessionKey)
+
+	appDetails, err := h.db.GetApp(appDid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	_, _, cred, err := utils.ParseVerifiableCredentialFromJWT(credJwt)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if cred.Issuer != appDetails.AppDID {
+		http.Error(w, "invalid credential", http.StatusInternalServerError)
+	}
+	// For demonstration, let's just return a success message
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode("implementation pending")
+
+	json.NewEncoder(w).Encode(models.SignInResponse{AccessToken: "xxx"})
 }
 
-func getCallbackUrl(r *http.Request, did, provider string) string {
-	scheme := "http" // Default to HTTP, check if request is HTTPS if needed
-	host := r.Host   // This gets the host from the request header
-	url := fmt.Sprintf("%s://%s", scheme, host)
-	return fmt.Sprintf("%s/%s/%s/%s", url, "callback", provider, did)
+func (h *AuthHandler) GrandAccess(w http.ResponseWriter, r *http.Request) {
+}
+
+func (h *AuthHandler) RevokeAccess(w http.ResponseWriter, r *http.Request) {
+}
+
+func (h *AuthHandler) VerifyAccess(w http.ResponseWriter, r *http.Request) {
 }
