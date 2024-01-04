@@ -99,12 +99,12 @@
             var queryParams = new URLSearchParams(window.location.search);
             var type = queryParams.get('type');
             var appDid = queryParams.get('app_did');
-            var sessionToken = queryParams.get('session_token');
+            // var sessionToken = queryParams.get('session_token');
 
             if (type === 'login') {
                 showLoading(true);
                 // Make a request to the /signup endpoint
-                fetch('/signup?app_did=' + appDid + '&session_token=' + sessionToken)
+                fetch('/signup?app_did=' + appDid)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -213,9 +213,7 @@
                 });
         }
         function cancel() {
-            window.CloseWebView.postMessage('Credential Issued');
-            // Call the endpoint to cancel
-            // Example: window.location.href = '/cancel-endpoint';
+            window.CloseWebView.postMessage('Cancel');
         }
     </script>
 </body>

@@ -6,10 +6,8 @@ import (
 	"identitysphere-api/services"
 	"identitysphere-api/store"
 	"net/http"
-	"strings"
 
 	"github.com/go-playground/validator"
-	"github.com/google/uuid"
 )
 
 // AppHandler handles application-related requests
@@ -35,71 +33,12 @@ func (h *AppHandler) HandleApplications(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-// GetConfig godoc
-// @Summary Get application configuration
-// @Description Retrieve the configuration for a specific application.
-// @Tags Application Management
-// @Accept  json
-// @Produce  json
-// @Param app_did path string true "Application DID"
-// @Success 200 {object} models.Config "Configuration retrieved successfully"
-// @Failure 400 {string} string "Invalid request"
-// @Failure 404 {string} string "Application not found"
-// @Failure 500 {string} string "Internal server error"
-// @Router /application/{app_did}/config [get]
-func (h *AppHandler) GetConfig(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "Only GET method is allowed", http.StatusMethodNotAllowed)
-		return
-	}
-	// Split the URL path into segments
-	pathSegments := strings.Split(r.URL.Path, "/")
-	// The URL format is /application/{app_did}/config
-	// Checking for minimum segments and specific segments
-	if len(pathSegments) < 4 || pathSegments[1] != "application" || pathSegments[3] != "config" {
-		http.NotFound(w, r)
-		return
-	}
-
-	appID := pathSegments[2]
-	app, err := h.db.GetApp(appID)
-	if err != nil {
-		http.Error(w, "app did is not configured yet", http.StatusInternalServerError)
-		return
-	}
-
-	auth, err := h.db.GetAuthProvider(appID)
-	if err != nil {
-		http.Error(w, "app authentication is not configured yet", http.StatusInternalServerError)
-		return
-	}
-
-	cred, err := h.db.GetIssuedPolicy(appID)
-	if err != nil {
-		http.Error(w, "policy is not configured yet", http.StatusInternalServerError)
-		return
-	}
-	config := models.Config{
-		App:        app,
-		Auth:       auth,
-		Cred:       cred,
-		SessionKey: uuid.New().String(),
-	}
-	err = h.db.SetConfig(config)
-	if err != nil {
-		http.Error(w, "config not set", http.StatusInternalServerError)
-		return
-	}
-	// Send the app config as a JSON response
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(config) // Assuming 'app' holds the configuration
-}
-
 // @Summary Get all applications
 // @Description Retrieves a list of all applications
 // @Tags Application Management
 // @Accept json
 // @Produce json
+// @Param x-api-key header string true "API Key"
 // @Success 200 {array} models.ApplicationResponse
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /applications [get]
@@ -120,6 +59,7 @@ func (h *AppHandler) getApplications(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param application body models.ApplicationRequest true "Application to create"
+// @Param x-api-key header string true "API Key"
 // @Success 200 {object} models.ApplicationResponse
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"

@@ -15,56 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/application/{app_did}/config": {
-            "get": {
-                "description": "Retrieve the configuration for a specific application.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Application Management"
-                ],
-                "summary": "Get application configuration",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Application DID",
-                        "name": "app_did",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Configuration retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/models.Config"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Application not found",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/applications": {
             "get": {
                 "description": "Retrieves a list of all applications",
@@ -78,6 +28,15 @@ const docTemplate = `{
                     "Application Management"
                 ],
                 "summary": "Get all applications",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -117,6 +76,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.ApplicationRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -155,6 +121,13 @@ const docTemplate = `{
                 ],
                 "summary": "Attach policy to application",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "Application Policy Request",
                         "name": "appPolicy",
@@ -200,6 +173,15 @@ const docTemplate = `{
                     "Authentication Management"
                 ],
                 "summary": "Get available auth providers",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -233,6 +215,13 @@ const docTemplate = `{
                 ],
                 "summary": "Link Authentication Provider",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "Authentication Provider Details",
                         "name": "provider",
@@ -280,6 +269,13 @@ const docTemplate = `{
                 "summary": "UnLink Authentication Provider",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Authentication Provider Details",
                         "name": "provider",
                         "in": "body",
@@ -326,6 +322,13 @@ const docTemplate = `{
                 "summary": "Create a new policy",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Policy Schema",
                         "name": "schema",
                         "in": "body",
@@ -350,6 +353,89 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/get-access-token": {
+            "post": {
+                "description": "Handles the sign-in process using application DID, credential JWT, and session key.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Sign in or get access token to an application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer YOUR_ACCESS_TOKEN",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Application to create",
+                        "name": "application",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GetAccessTokenRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Access Token",
+                        "schema": {
+                            "$ref": "#/definitions/models.GetAccessTokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/grant-access": {
+            "put": {
+                "description": "Grants access based on a valid request.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permission Management"
+                ],
+                "summary": "Grant access to a user",
+                "responses": {
+                    "200": {
+                        "description": "implementation pending",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Only PUT method is allowed",
                         "schema": {
                             "type": "string"
                         }
@@ -385,7 +471,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Credential successfully issued",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/models.IssueOAuthCredentialResponse"
                         }
                     },
                     "400": {
@@ -416,6 +502,15 @@ const docTemplate = `{
                     "Authorization Management"
                 ],
                 "summary": "Get all policies",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -428,6 +523,64 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/request-access": {
+            "post": {
+                "description": "Initiates a request for user access.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Request access for a user",
+                "responses": {
+                    "200": {
+                        "description": "implementation pending",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Only POST method is allowed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/revoke-access": {
+            "put": {
+                "description": "Revokes the access of a user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permission Management"
+                ],
+                "summary": "Revoke access of a user",
+                "responses": {
+                    "200": {
+                        "description": "implementation pending",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Only PUT method is allowed",
                         "schema": {
                             "type": "string"
                         }
@@ -464,64 +617,6 @@ const docTemplate = `{
                         "description": "Credential successfully revoked",
                         "schema": {
                             "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/sign-in": {
-            "get": {
-                "description": "Handles the sign-in process using application DID, credential JWT, and session key.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User Access Management"
-                ],
-                "summary": "Sign in to an application",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Application DID",
-                        "name": "app_did",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Credential JWT",
-                        "name": "cred_jwt",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Session Key",
-                        "name": "session_key",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Access Token",
-                        "schema": {
-                            "$ref": "#/definitions/models.SignInResponse"
                         }
                     },
                     "400": {
@@ -580,6 +675,63 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/verify-access": {
+            "get": {
+                "description": "Verifies if a user has access to a specific resource based on their role.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Verify access to a resource",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer YOUR_ACCESS_TOKEN",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "e.g.; Role to check access for",
+                        "name": "attribute",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }
@@ -723,19 +875,24 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Config": {
+        "models.GetAccessTokenRequest": {
+            "type": "object",
+            "required": [
+                "oauth_credential",
+                "policy_credential"
+            ],
+            "properties": {
+                "app_did": {
+                    "type": "string"
+                },
+                "oauth_credential": {},
+                "policy_credential": {}
+            }
+        },
+        "models.GetAccessTokenResponse": {
             "type": "object",
             "properties": {
-                "app": {
-                    "$ref": "#/definitions/models.ApplicationResponse"
-                },
-                "auth": {
-                    "$ref": "#/definitions/models.AuthProvider"
-                },
-                "cred": {
-                    "$ref": "#/definitions/models.ApplicationPolicyResponse"
-                },
-                "sessionKey": {
+                "access_token": {
                     "type": "string"
                 }
             }
@@ -761,6 +918,17 @@ const docTemplate = `{
                 "user_did": {
                     "type": "string"
                 }
+            }
+        },
+        "models.IssueOAuthCredentialResponse": {
+            "type": "object",
+            "required": [
+                "oauth_credential",
+                "policy_credential"
+            ],
+            "properties": {
+                "oauth_credential": {},
+                "policy_credential": {}
             }
         },
         "models.JsonSchema": {
@@ -817,14 +985,6 @@ const docTemplate = `{
                 },
                 "schema": {
                     "$ref": "#/definitions/models.JsonSchema"
-                }
-            }
-        },
-        "models.SignInResponse": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
                 }
             }
         }

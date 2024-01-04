@@ -25,6 +25,7 @@ func NewAuthProviderHandler(ssiService *services.SsiClient, db *store.Store) *Au
 // @Tags Authentication Management
 // @Accept json
 // @Produce json
+// @Param x-api-key header string true "API Key"
 // @Success 200 {array} models.AvailableProvider
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /auth-provider [get]
@@ -51,6 +52,7 @@ func (h *AuthProviderHandler) GetAuthConnectorHandler(w http.ResponseWriter, r *
 // @Tags Authentication Management
 // @Accept json
 // @Produce json
+// @Param x-api-key header string true "API Key"
 // @Param provider body models.AuthProvider true "Authentication Provider Details"
 // @Success 200 {object} models.AuthProvider "Successfully linked provider"
 // @Failure 400 {string} string "Bad Request"
@@ -96,6 +98,7 @@ func (h *AuthProviderHandler) LinkAuthProviderHandler(w http.ResponseWriter, r *
 // @Tags Authentication Management
 // @Accept json
 // @Produce json
+// @Param x-api-key header string true "API Key"
 // @Param provider body interface{} true "Authentication Provider Details"
 // @Success 200 {object} interface{} "Successfully linked provider"
 // @Failure 400 {string} string "Bad Request"

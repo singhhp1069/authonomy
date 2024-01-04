@@ -1,0 +1,8 @@
+# config.yaml
+service:
+  badger_path: "./badger_db"
+  db_encryption_key: "badger"
+  jwt_encryption_key: "random"
+api:
+  x-api-key: "9dfccbf4-8c41-412f-841f-8cc10e4a26be"
+

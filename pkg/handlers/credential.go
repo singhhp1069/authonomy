@@ -29,7 +29,7 @@ func NewCredentialHandler(ssiService *services.SsiClient, db *store.Store) *Cred
 // @Accept  json
 // @Produce  json
 // @Param issueOAuthCredentialRequest body models.IssueOAuthCredentialRequest true "Issue Credential Request"
-// @Success 200 {object} interface{} "Credential successfully issued"
+// @Success 200 {object} models.IssueOAuthCredentialResponse "Credential successfully issued"
 // @Failure 400 {string} string "Bad request"
 // @Failure 500 {string} string "Internal server error"
 // @Router /issue-credential [post]
@@ -65,6 +65,12 @@ func (h *CredentialHandler) IssueOAuthCredential(w http.ResponseWriter, r *http.
 	if err != nil {
 		http.Error(w, "Failed to get application DID: "+err.Error(), http.StatusInternalServerError)
 	}
+
+	policy, err := h.db.GetIssuedPolicy(app.AppDID)
+	if err != nil {
+		http.Error(w, "Failed to get application policy: "+err.Error(), http.StatusInternalServerError)
+	}
+
 	isDIDExits := h.ssiService.IsDIDExists(credReq.AppDID)
 	if !isDIDExits {
 		http.Error(w, "Failed to get application DID: "+err.Error(), http.StatusInternalServerError)
@@ -74,17 +80,30 @@ func (h *CredentialHandler) IssueOAuthCredential(w http.ResponseWriter, r *http.
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	credMap, err := models.StructToMap(models.UserInfo{UserID: userInfo.ID, Name: userInfo.Name})
+	userCredMap, err := models.StructToMap(models.UserInfo{UserID: userInfo.ID, Name: userInfo.Name})
 	if err != nil {
 		http.Error(w, "Failed to convert to map: "+err.Error(), http.StatusInternalServerError)
 	}
 	// TODO:: revokable
-	credential, err := h.ssiService.IssueCredentialBySchemaID(app.AppDID, credReq.UserDID, schema.SchemaID, credMap)
+	userCredential, err := h.ssiService.IssueCredentialBySchemaID(app.AppDID, credReq.UserDID, schema.SchemaID, userCredMap)
 	if err != nil {
-		http.Error(w, "Failed to issue credential: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Failed to issue userCredential: "+err.Error(), http.StatusInternalServerError)
+	}
+	// default role as user (hardcoded for the hackathon demo)
+	userRole := models.Role{
+		RoleName:    "user",
+		Permissions: []string{"view_content", "comment"},
+	}
+	policyCredMap, err := models.StructToMap(models.RolesWrapper{Roles: []models.Role{userRole}})
+	if err != nil {
+		http.Error(w, "Failed to convert to map: "+err.Error(), http.StatusInternalServerError)
+	}
+	policyCredential, err := h.ssiService.IssueCredentialBySchemaID(app.AppDID, credReq.UserDID, policy.SchemaID, policyCredMap)
+	if err != nil {
+		http.Error(w, "Failed to issue policyCredential: "+err.Error(), http.StatusInternalServerError)
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(credential)
+	json.NewEncoder(w).Encode(models.IssueOAuthCredentialResponse{OAuthCredential: userCredential, PolicyCredential: policyCredential})
 }
 
 // RevokeOAuthCredential godoc

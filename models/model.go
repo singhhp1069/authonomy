@@ -96,13 +96,6 @@ type OAuthConfig struct {
 	// TokenURL     string   `json:"tokenUrl"`
 }
 
-type Config struct {
-	App        *ApplicationResponse
-	Auth       *AuthProvider
-	Cred       *ApplicationPolicyResponse
-	SessionKey string
-}
-
 type ProviderSchema struct {
 	ProviderName string `json:"provider_name" `
 	SchemaID     string `json:"schema_id" `
@@ -116,11 +109,8 @@ type IssueOAuthCredentialRequest struct {
 }
 
 type IssueOAuthCredentialResponse struct {
-	ID                                 string                       `json:"id" binding:"required"`
-	Credential                         credsdk.VerifiableCredential `json:"credential"`
-	DID                                didsdk.Document              `json:"did"`
-	CredentailJWT                      string                       `json:"credentialJwt" binding:"required"`
-	FullyQualifiedVerificationMethodId string                       `json:"fullyQualifiedVerificationMethodId" binding:"required"`
+	OAuthCredential  interface{} `json:"oauth_credential" validate:"required"`
+	PolicyCredential interface{} `json:"policy_credential" validate:"required"`
 }
 
 type UserInfo struct {
@@ -130,25 +120,14 @@ type UserInfo struct {
 	// more fields soon
 }
 
-type SignInResponse struct {
+type GetAccessTokenRequest struct {
+	AppDID           string      `json:"app_did"`
+	OAuthCredential  interface{} `json:"oauth_credential" validate:"required"`
+	PolicyCredential interface{} `json:"policy_credential" validate:"required"`
+}
+
+type GetAccessTokenResponse struct {
 	AccessToken string `json:"access_token"`
-}
-
-type GrantAccessRequest struct {
-	AccessToken   string                 `json:"access_token"`
-	PolicySubject map[string]interface{} `json:"policy_subject"`
-}
-
-type GrantAccessResponse struct {
-	AccessCredential CredentialResponse `json:"access_credential"`
-}
-
-type RevokeAccessRequest struct {
-	CredentialJWT string `json:"credential_jwt"`
-}
-
-type RevokeAccessResponse struct {
-	Status bool `json:"status"`
 }
 
 type VerifyAccessRequest struct {
@@ -173,4 +152,19 @@ func StructToMap(data interface{}) (map[string]interface{}, error) {
 	}
 
 	return result, nil
+}
+
+// Define structs to match the JSON structure
+type RBAC struct {
+	ID    string `json:"id"`
+	Roles []Role `json:"roles"`
+}
+
+type Role struct {
+	RoleName    string   `json:"roleName"`
+	Permissions []string `json:"permissions"`
+}
+
+type RolesWrapper struct {
+	Roles []Role `json:"roles"`
 }

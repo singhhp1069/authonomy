@@ -25,6 +25,7 @@ func NewPolicyHandler(ssiService *services.SsiClient, db *store.Store) *PolicyHa
 // @Tags Authorization Management
 // @Accept json
 // @Produce json
+// @Param x-api-key header string true "API Key"
 // @Success 200 {array} models.PolicySchemaResponse
 // @Failure 500 {string} string "Internal Server Error"
 // @Router /policies [get]
@@ -48,6 +49,7 @@ func (h *PolicyHandler) GetPolicyHandler(w http.ResponseWriter, r *http.Request)
 // @Tags Authorization Management
 // @Accept json
 // @Produce json
+// @Param x-api-key header string true "API Key"
 // @Param schema body models.PolicySchemaRequest true "Policy Schema"
 // @Success 200 {object} models.PolicySchemaResponse "Successfully created policy"
 // @Failure 400 {string} string "Bad Request"
@@ -84,6 +86,7 @@ func (h *PolicyHandler) CreatePolicyHandler(w http.ResponseWriter, r *http.Reque
 // @Tags Authorization Management
 // @Accept json
 // @Produce json
+// @Param x-api-key header string true "API Key"
 // @Param appPolicy body models.ApplicationPolicyRequest true "Application Policy Request"
 // @Success 200 {object} models.ApplicationPolicyResponse "Successfully attached policy"
 // @Failure 400 {string} string "Bad Request"

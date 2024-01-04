@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"identitysphere-api/models"
+	"identitysphere-api/pkg/utils"
 
 	"github.com/dgraph-io/badger/v3"
 )
@@ -19,16 +20,18 @@ const (
 
 // Store encapsulates the BadgerDB operations
 type Store struct {
-	db *badger.DB
+	db     *badger.DB
+	secret []byte
 }
 
 // NewStore initializes and returns a new Store instance
-func NewStore() (*Store, error) {
-	db, err := badger.Open(badger.DefaultOptions("./badger_db"))
+func NewStore(path string, s string) (*Store, error) {
+	db, err := badger.Open(badger.DefaultOptions(path))
 	if err != nil {
 		return nil, err
 	}
-	return &Store{db: db}, nil
+	secret := utils.GenerateEncryptionKey(s)
+	return &Store{db: db, secret: secret}, nil
 }
 
 // ClearDB deletes all key-value pairs in the database
@@ -48,6 +51,10 @@ func (s *Store) SetApp(app models.ApplicationResponse) error {
 		if err != nil {
 			return err
 		}
+		// encryptedAppJSON, err := encryptData(appJSON, )
+		// if err != nil {
+		//     return err
+		// }
 		return txn.Set([]byte(app_prefix+app.AppDID), appJSON)
 	})
 }
@@ -60,7 +67,14 @@ func (s *Store) GetApp(appID string) (*models.ApplicationResponse, error) {
 		if err != nil {
 			return err
 		}
+
 		return item.Value(func(val []byte) error {
+			// // Decrypt data
+			// decryptedVal, err := decryptData(val, generateEncryptionKey(configKey))
+			// if err != nil {
+			// 	return nil, err
+			// }
+			// return json.Unmarshal(decryptedVal, &app)
 			return json.Unmarshal(val, &app)
 		})
 	})
@@ -225,35 +239,6 @@ func (s *Store) GetAllPolicies() ([]models.PolicySchemaResponse, error) {
 		return nil, err
 	}
 	return policies, nil
-}
-
-// SetApp stores an Application instance in the database
-func (s *Store) SetConfig(config models.Config) error {
-	return s.db.Update(func(txn *badger.Txn) error {
-		appJSON, err := json.Marshal(config)
-		if err != nil {
-			return err
-		}
-		return txn.Set([]byte(conf_prefix+config.App.AppDID), appJSON)
-	})
-}
-
-// GetApp retrieves an Application instance from the database
-func (s *Store) GetConfig(appID string) (*models.Config, error) {
-	var config models.Config
-	err := s.db.View(func(txn *badger.Txn) error {
-		item, err := txn.Get([]byte(app_prefix + appID))
-		if err != nil {
-			return err
-		}
-		return item.Value(func(val []byte) error {
-			return json.Unmarshal(val, &config)
-		})
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &config, nil
 }
 
 func (s *Store) SetProviderSchema(prov models.ProviderSchema) error {
