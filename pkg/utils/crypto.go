@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"identitysphere-api/models"
+	"authonomy/models"
 	"time"
 
 	"github.com/golang-jwt/jwt"

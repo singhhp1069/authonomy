@@ -1,10 +1,10 @@
 package handlers
 
 import (
+	"authonomy/models"
+	"authonomy/services"
+	"authonomy/store"
 	"encoding/json"
-	"identitysphere-api/models"
-	"identitysphere-api/services"
-	"identitysphere-api/store"
 	"net/http"
 
 	"github.com/go-playground/validator"

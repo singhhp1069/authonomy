@@ -1,60 +1,47 @@
 package cmd
 
 import (
+	"authonomy/pkg/handlers"
+	"authonomy/services"
+	"authonomy/store"
 	"fmt"
-	"identitysphere-api/pkg/handlers"
-	"identitysphere-api/services"
-	"identitysphere-api/store"
 	"log"
 	"net/http"
 
-	_ "identitysphere-api/docs" // Swaggo generates docs in this package
+	_ "authonomy/docs" // Swaggo generates docs in this package
 
-	"github.com/spf13/viper"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-func getConfig() {
-	// Set the base name of the config file, without the file extension.
-	viper.SetConfigName("config")
-	// Set the path to look for the config file in.
-	viper.AddConfigPath(".")
-	// Read in environment variables that match
-	viper.AutomaticEnv()
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	} else {
-		fmt.Println("Error reading config file:", err)
-	}
-}
-
-func Start() {
-	getConfig()
-	dbPath := viper.GetString("service.badger_path")
-	secret := viper.GetString("service.db_encryption_key")
+func Start(dbPath, secret, apiKey, port, ssiUrl string, reset bool) {
 	// Initialize the data store (e.g., database connection)
 	store, err := store.NewStore(dbPath, secret)
 	if err != nil {
 		log.Fatalf("Failed to initialize the database: %v", err)
 	}
 	defer store.Close()
-	// // clear db before start (for the demo)
-	// err = store.ClearDB()
-	// if err != nil {
-	// 	log.Fatalf("Failed to clean the database: %v", err)
-	// }
 	// Initialize services with dependencies
-	ssiService := services.NewSsiClient()
-	// // Dummy policies
-	// err = services.CreateDemoPolicies(ssiService, store)
-	// if err != nil {
-	// 	log.Fatalf("Failed to create policies: %v", err)
-	// }
-	apiKey := viper.GetString("api.x-api-key")
+	ssiService := services.NewSsiClient(ssiUrl)
+	// clear db before start (for the demo) or use the reset flag
+	if reset {
+		err = store.ClearDB()
+		if err != nil {
+			log.Fatalf("Failed to clean the database: %v", err)
+		}
+
+		// Dummy policies
+		err = services.CreateDemoPolicies(ssiService, store)
+		if err != nil {
+			log.Fatalf("Failed to create policies: %v", err)
+		}
+	}
+
 	fmt.Println("=======================")
 	fmt.Println("\033[32m", "------x-api-key------", "\033[0m")
 	fmt.Println("\033[32m", apiKey, "\033[0m")
+	fmt.Println("=======================")
+	fmt.Println("=====Swagger=======")
+	fmt.Println("\033[32m", fmt.Sprintf("http://localhost%s/swagger", port), "\033[0m")
 	fmt.Println("=======================")
 	// Initialize handlers with services
 	m := handlers.NewMiddlewareService(apiKey)
@@ -100,6 +87,6 @@ func Start() {
 	fs := http.FileServer(http.Dir("web"))
 	http.Handle("/web/", http.StripPrefix("/web/", fs))
 	// Start the server
-	log.Println("Starting server on port 8081...")
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	log.Printf("Starting server on port %s", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }

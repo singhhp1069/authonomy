@@ -1,11 +1,11 @@
 package handlers
 
 import (
+	"authonomy/models"
+	"authonomy/services"
+	"authonomy/store"
 	"encoding/json"
 	"fmt"
-	"identitysphere-api/models"
-	"identitysphere-api/services"
-	"identitysphere-api/store"
 	"net/http"
 )
 

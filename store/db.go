@@ -1,10 +1,10 @@
 package store
 
 import (
+	"authonomy/models"
+	"authonomy/pkg/utils"
 	"bytes"
 	"encoding/json"
-	"identitysphere-api/models"
-	"identitysphere-api/pkg/utils"
 
 	"github.com/dgraph-io/badger/v3"
 )
@@ -51,11 +51,11 @@ func (s *Store) SetApp(app models.ApplicationResponse) error {
 		if err != nil {
 			return err
 		}
-		// encryptedAppJSON, err := encryptData(appJSON, )
-		// if err != nil {
-		//     return err
-		// }
-		return txn.Set([]byte(app_prefix+app.AppDID), appJSON)
+		encryptedAppJSON, err := utils.EncryptData(appJSON, s.secret)
+		if err != nil {
+			return err
+		}
+		return txn.Set([]byte(app_prefix+app.AppDID), encryptedAppJSON)
 	})
 }
 
@@ -69,13 +69,12 @@ func (s *Store) GetApp(appID string) (*models.ApplicationResponse, error) {
 		}
 
 		return item.Value(func(val []byte) error {
-			// // Decrypt data
-			// decryptedVal, err := decryptData(val, generateEncryptionKey(configKey))
-			// if err != nil {
-			// 	return nil, err
-			// }
-			// return json.Unmarshal(decryptedVal, &app)
-			return json.Unmarshal(val, &app)
+			// Decrypt data
+			decryptedVal, err := utils.DecryptData(val, s.secret)
+			if err != nil {
+				return err
+			}
+			return json.Unmarshal(decryptedVal, &app)
 		})
 	})
 	if err != nil {

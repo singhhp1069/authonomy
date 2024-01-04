@@ -1,9 +1,9 @@
 package providers
 
 import (
+	"authonomy/pkg/utils"
 	"encoding/json"
 	"fmt"
-	"identitysphere-api/pkg/utils"
 	"net/http"
 )
 

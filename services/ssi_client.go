@@ -1,29 +1,30 @@
 package services
 
 import (
+	"authonomy/models"
+	"authonomy/store"
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"identitysphere-api/models"
-	"identitysphere-api/store"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-const (
-	SSI_BASE_URL = "http://localhost:8080/v1" // Replace with actual SSI service URL
-)
-
 // SsiClient is the client for interacting with the SSI service
 type SsiClient struct {
+	serviceUrl string
 	httpClient *http.Client
 }
 
 // NewSsiClient creates a new instance of SsiClient
-func NewSsiClient() *SsiClient {
+func NewSsiClient(url string) *SsiClient {
+	if url == "" {
+		panic("ssi service url not set")
+	}
 	return &SsiClient{
+		serviceUrl: url,
 		httpClient: &http.Client{},
 	}
 }
@@ -35,20 +36,20 @@ func CreateDemoPolicies(client *SsiClient, db *store.Store) error {
 		return err
 	}
 	// set RBAC policy
-	policy, err := client.createPolicyFromFile(filepath.Join(path, "services", "sample_schema", "rbac.json"), db)
+	policy, err := client.createPolicyFromFile(filepath.Join(path, "sample_schema", "rbac.json"), db)
 	if err != nil {
 		return fmt.Errorf("error creating policy from file %v", err)
 	}
 	db.SetPolicy(policy)
 	// set ABAC policy
-	policy, err = client.createPolicyFromFile(filepath.Join(path, "services", "sample_schema", "abac.json"), db)
+	policy, err = client.createPolicyFromFile(filepath.Join(path, "sample_schema", "abac.json"), db)
 	if err != nil {
 		return fmt.Errorf("error creating policy from file %v", err)
 	}
 	db.SetPolicy(policy)
 
 	// set OAuth2 user info schema
-	policy, err = client.createPolicyFromFile(filepath.Join(path, "services", "sample_schema", "oauth_info.json"), db)
+	policy, err = client.createPolicyFromFile(filepath.Join(path, "sample_schema", "oauth_info.json"), db)
 	if err != nil {
 		return fmt.Errorf("error creating policy from file %v", err)
 	}
@@ -57,7 +58,6 @@ func CreateDemoPolicies(client *SsiClient, db *store.Store) error {
 }
 
 func (client *SsiClient) createPolicyFromFile(filePath string, db *store.Store) (schemaRep models.PolicySchemaResponse, err error) {
-	fmt.Println("filePath", filePath)
 	// Read the JSON file
 	fileBytes, err := os.ReadFile(filePath)
 	if err != nil {
@@ -85,7 +85,7 @@ func (client *SsiClient) CreateDid() (string, error) {
 		return "", err
 	}
 
-	req, err := http.NewRequest("PUT", SSI_BASE_URL+"/dids/key", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("PUT", client.serviceUrl+"/dids/key", bytes.NewBuffer(requestBody))
 	if err != nil {
 		return "", err
 	}
@@ -111,8 +111,7 @@ func (client *SsiClient) CreatePolicy(schema models.PolicySchemaRequest) (policy
 	if err != nil {
 		return policy, err
 	}
-
-	req, err := http.NewRequest("PUT", SSI_BASE_URL+"/schemas", bytes.NewBuffer(schemaBody))
+	req, err := http.NewRequest("PUT", client.serviceUrl+"/schemas", bytes.NewBuffer(schemaBody))
 	if err != nil {
 		return policy, err
 	}
@@ -150,7 +149,7 @@ func (client *SsiClient) IssueCredentialBySchemaID(issuer, subject, schemaID str
 		return cred, err
 	}
 
-	req, err := http.NewRequest("PUT", SSI_BASE_URL+"/credentials", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("PUT", client.serviceUrl+"/credentials", bytes.NewBuffer(requestBody))
 	if err != nil {
 		return cred, err
 	}
@@ -205,7 +204,7 @@ func (client *SsiClient) IssueCredentialBySchemaID(issuer, subject, schemaID str
 
 // IsSchemaExists checks if a schema exists
 func (client *SsiClient) IsSchemaExists(schema string) bool {
-	resp, err := client.httpClient.Get(SSI_BASE_URL + "/schemas/" + schema)
+	resp, err := client.httpClient.Get(client.serviceUrl + "/schemas/" + schema)
 	if err != nil {
 		fmt.Println("Error sending request:", err)
 		return false
@@ -217,7 +216,7 @@ func (client *SsiClient) IsSchemaExists(schema string) bool {
 
 // IsDIDExists checks if a DID exists
 func (client *SsiClient) IsDIDExists(did string) bool {
-	resp, err := client.httpClient.Get(SSI_BASE_URL + "/dids/key/" + did)
+	resp, err := client.httpClient.Get(client.serviceUrl + "/dids/key/" + did)
 	if err != nil {
 		fmt.Println("Error sending request:", err)
 		return false

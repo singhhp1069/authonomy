@@ -2,9 +2,9 @@
 package main
 
 import (
-	"identitysphere-api/cmd"
+	"authonomy/cmd"
 )
 
 func main() {
-	cmd.Start()
+	cmd.Execute()
 }

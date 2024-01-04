@@ -1,0 +1,16 @@
+
+version: '3.8'
+
+services:
+  authonomy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    command: ./authonomy start --reset
+    volumes:
+      - .:/app
+      - ./config.yaml:/root/config.yaml
+      - ./sample_schema:/root/sample_schema
+
