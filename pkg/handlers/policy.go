@@ -125,10 +125,11 @@ func (h *PolicyHandler) AttachPolicyHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	policyResponse := models.ApplicationPolicyResponse{
-		ApplicationDID: appPolicy.ApplicationDID,
-		SchemaID:       appPolicy.SchemaID,
-		IssuerDID:      appPolicy.IssuerDID,
-		CredentialID:   respSchema.ID,
+		ApplicationDID:    appPolicy.ApplicationDID,
+		SchemaID:          appPolicy.SchemaID,
+		IssuerDID:         appPolicy.IssuerDID,
+		CredentialID:      respSchema.ID,
+		CredentialSubject: respSchema.Credential.CredentialSubject,
 	}
 	// Save the new application details to BadgerDB
 	err = h.db.SetIssuedPolicy(policyResponse)

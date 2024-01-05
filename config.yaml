@@ -4,7 +4,4 @@ service:
   db_encryption_key: badger
   jwt_encryption_key: random
   port: 8081
-  ssi_service_url : http://172.23.0.5:8080/v1
-api:
-  x-api-key: 9dfccbf4-8c41-412f-841f-8cc10e4a26be
-
+  ssi_service_url : http://ssi:3000/v1

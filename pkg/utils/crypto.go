@@ -13,12 +13,13 @@ var encryptionKey = []byte(secret)
 var validity = 24 * time.Hour
 
 type CustomClaims struct {
-	AppDID         string                              `json:"app_id"`
-	CredentialJWTs models.IssueOAuthCredentialResponse `json:"credential_jwts"`
+	AppDID         string                      `json:"app_id"`
+	CredentialJWTs models.IssueOAuthCredential `json:"credential_jwts"`
 	jwt.StandardClaims
 }
 
-func CreateAccessToken(appDID string, credentialJWTs models.IssueOAuthCredentialResponse) (string, error) {
+// CreateAccessToken create a access token.
+func CreateAccessToken(appDID string, credentialJWTs models.IssueOAuthCredential) (string, error) {
 	expirationTime := time.Now().Add(validity)
 	claims := CustomClaims{
 		AppDID:         appDID,
@@ -37,6 +38,7 @@ func CreateAccessToken(appDID string, credentialJWTs models.IssueOAuthCredential
 	return tokenString, nil
 }
 
+// ValidateAccessToken validates the access token.
 func ValidateAccessToken(tokenString string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return encryptionKey, nil

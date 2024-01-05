@@ -14,12 +14,14 @@ var rootCmd = &cobra.Command{
 	Long:  "authonomy service build over ssi service",
 }
 
+// init initialize the command.
 func init() {
 	cobra.OnInitialize(getConfig)
 	rootCmd.AddCommand(startCmd)
 	startCmd.Flags().BoolVarP(&resetFlag, "reset", "r", false, "Reset the service")
 }
 
+// getConfig read the configuration.
 func getConfig() {
 	// Set the base name of the config file, without the file extension.
 	viper.SetConfigName("config")
@@ -35,6 +37,7 @@ func getConfig() {
 	}
 }
 
+// servicePort get the port from the config else sets the default.
 func servicePort() string {
 	port := viper.GetString("service.port")
 	if port == "" {
@@ -43,19 +46,21 @@ func servicePort() string {
 	return ":" + port
 }
 
+// resetFlag the flag is to reset the database and imports the supported schema.
 var resetFlag bool
+
 var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start the authonomy service",
 	Run: func(cmd *cobra.Command, args []string) {
 		dbPath := viper.GetString("service.badger_path")
 		secret := viper.GetString("service.db_encryption_key")
-		apiKey := viper.GetString("api.x-api-key")
 		ssiUrl := viper.GetString("service.ssi_service_url")
-		Start(dbPath, secret, apiKey, servicePort(), ssiUrl, resetFlag)
+		Start(dbPath, secret, servicePort(), ssiUrl, resetFlag)
 	},
 }
 
+// Execute entrypoint for the service.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {

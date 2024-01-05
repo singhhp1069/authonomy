@@ -34,12 +34,19 @@ func (h *AuthProviderHandler) GetAuthConnectorHandler(w http.ResponseWriter, r *
 		http.Error(w, "Only GET method is allowed", http.StatusMethodNotAllowed)
 		return
 	}
+
+	providerSchema, err := h.db.GetProviderSchema("facebook")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	// hardcoded connector can be build to supported various mediums.
 	connectors := []models.AvailableProvider{
 		{
 			ProviderName:     "facebook",
 			ProviderType:     "social",
 			ProviderProtocol: "oauth2",
+			ProviderSchemaID: providerSchema.SchemaID,
 		},
 	}
 	w.Header().Set("Content-Type", "application/json")

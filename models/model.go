@@ -19,6 +19,7 @@ type AppDetails struct {
 
 type ApplicationResponse struct {
 	AppDID     string     `json:"app_did"`
+	AppSceret  string     `json:"app_secret"`
 	AppName    string     `json:"app_name"`
 	AppDetails AppDetails `json:"app_details"`
 }
@@ -52,10 +53,11 @@ type ApplicationPolicyRequest struct {
 	Credential     map[string]interface{} `json:"credential" validate:"required"`
 }
 type ApplicationPolicyResponse struct {
-	ApplicationDID string `json:"application_did"`
-	SchemaID       string `json:"schema_id"`
-	IssuerDID      string `json:"issuer_did"`
-	CredentialID   string `json:"credential_id"`
+	ApplicationDID    string      `json:"application_did"`
+	SchemaID          string      `json:"schema_id"`
+	IssuerDID         string      `json:"issuer_did"`
+	CredentialID      string      `json:"credential_id"`
+	CredentialSubject interface{} `json:"credential_subject"`
 }
 
 type CredentialRequest struct {
@@ -84,6 +86,7 @@ type AvailableProvider struct {
 	ProviderName     string `json:"provider_name" validate:"required"`
 	ProviderType     string `json:"provider_type" validate:"required"` // social, email, phone, etc
 	ProviderProtocol string `json:"provider_protocol" validate:"required"`
+	ProviderSchemaID string `json:"provider_schema_id" validate:"required"`
 }
 
 // OAuthConfig holds the configuration for OAuth authentication
@@ -108,7 +111,7 @@ type IssueOAuthCredentialRequest struct {
 	UserDID     string `json:"user_did" validate:"required"`
 }
 
-type IssueOAuthCredentialResponse struct {
+type IssueOAuthCredential struct {
 	OAuthCredential  interface{} `json:"oauth_credential" validate:"required"`
 	PolicyCredential interface{} `json:"policy_credential" validate:"required"`
 }
@@ -118,12 +121,6 @@ type UserInfo struct {
 	Name   string `json:"name" validate:"required"`
 	Email  string `json:"email"`
 	// more fields soon
-}
-
-type GetAccessTokenRequest struct {
-	AppDID           string      `json:"app_did"`
-	OAuthCredential  interface{} `json:"oauth_credential" validate:"required"`
-	PolicyCredential interface{} `json:"policy_credential" validate:"required"`
 }
 
 type GetAccessTokenResponse struct {
@@ -167,4 +164,9 @@ type Role struct {
 
 type RolesWrapper struct {
 	Roles []Role `json:"roles"`
+}
+
+type AccessList struct {
+	ApplicationPolicy interface{} `json:"application_policy"`
+	UserAccessList    interface{} `json:"user_access_list"`
 }

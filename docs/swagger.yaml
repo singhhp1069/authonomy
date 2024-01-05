@@ -34,6 +34,7 @@ definitions:
         type: string
       credential_id:
         type: string
+      credential_subject: {}
       issuer_did:
         type: string
       schema_id:
@@ -59,6 +60,8 @@ definitions:
         type: string
       app_name:
         type: string
+      app_secret:
+        type: string
     type: object
   models.AuthProvider:
     properties:
@@ -79,46 +82,23 @@ definitions:
         type: string
       provider_protocol:
         type: string
+      provider_schema_id:
+        type: string
       provider_type:
         description: social, email, phone, etc
         type: string
     required:
     - provider_name
     - provider_protocol
+    - provider_schema_id
     - provider_type
-    type: object
-  models.GetAccessTokenRequest:
-    properties:
-      app_did:
-        type: string
-      oauth_credential: {}
-      policy_credential: {}
-    required:
-    - oauth_credential
-    - policy_credential
     type: object
   models.GetAccessTokenResponse:
     properties:
       access_token:
         type: string
     type: object
-  models.IssueOAuthCredentialRequest:
-    properties:
-      access_token:
-        type: string
-      app_did:
-        type: string
-      provider:
-        type: string
-      user_did:
-        type: string
-    required:
-    - access_token
-    - app_did
-    - provider
-    - user_did
-    type: object
-  models.IssueOAuthCredentialResponse:
+  models.IssueOAuthCredential:
     properties:
       oauth_credential: {}
       policy_credential: {}
@@ -395,12 +375,11 @@ paths:
       summary: Create a new policy
       tags:
       - Authorization Management
-  /get-access-token:
-    post:
+  /get-access-list:
+    get:
       consumes:
       - application/json
-      description: Handles the sign-in process using application DID, credential JWT,
-        and session key.
+      description: List the access for the user on the resource.
       parameters:
       - default: Bearer YOUR_ACCESS_TOKEN
         description: Authorization token
@@ -408,12 +387,50 @@ paths:
         name: Authorization
         required: true
         type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get Access list on the resource
+      tags:
+      - User Access Management
+  /get-access-token:
+    post:
+      consumes:
+      - application/json
+      description: Handles the sign-in process using application DID, credential JWT.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
       - description: Application to create
         in: body
         name: application
         required: true
         schema:
-          $ref: '#/definitions/models.GetAccessTokenRequest'
+          $ref: '#/definitions/models.IssueOAuthCredential'
       produces:
       - application/json
       responses:
@@ -437,6 +454,17 @@ paths:
       consumes:
       - application/json
       description: Grants access based on a valid request.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -451,36 +479,6 @@ paths:
       summary: Grant access to a user
       tags:
       - Permission Management
-  /issue-credential:
-    post:
-      consumes:
-      - application/json
-      description: Issue a new OAuth credential for a user.
-      parameters:
-      - description: Issue Credential Request
-        in: body
-        name: issueOAuthCredentialRequest
-        required: true
-        schema:
-          $ref: '#/definitions/models.IssueOAuthCredentialRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Credential successfully issued
-          schema:
-            $ref: '#/definitions/models.IssueOAuthCredentialResponse'
-        "400":
-          description: Bad request
-          schema:
-            type: string
-        "500":
-          description: Internal server error
-          schema:
-            type: string
-      summary: Issue OAuth Credential
-      tags:
-      - Authentication Management
   /policies:
     get:
       consumes:
@@ -513,6 +511,17 @@ paths:
       consumes:
       - application/json
       description: Initiates a request for user access.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -532,6 +541,17 @@ paths:
       consumes:
       - application/json
       description: Revokes the access of a user.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -587,9 +607,9 @@ paths:
         name: app_did
         required: true
         type: string
-      - description: Session Token
+      - description: Application secret
         in: query
-        name: session_token
+        name: app_secret
         required: true
         type: string
       produces:

@@ -22,17 +22,6 @@ func NewCredentialHandler(ssiService *services.SsiClient, db *store.Store) *Cred
 	return &CredentialHandler{ssiService: ssiService, db: db}
 }
 
-// IssueOAuthCredential godoc
-// @Summary Issue OAuth Credential
-// @Description Issue a new OAuth credential for a user.
-// @Tags Authentication Management
-// @Accept  json
-// @Produce  json
-// @Param issueOAuthCredentialRequest body models.IssueOAuthCredentialRequest true "Issue Credential Request"
-// @Success 200 {object} models.IssueOAuthCredentialResponse "Credential successfully issued"
-// @Failure 400 {string} string "Bad request"
-// @Failure 500 {string} string "Internal server error"
-// @Router /issue-credential [post]
 func (h *CredentialHandler) IssueOAuthCredential(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Only POST method is allowed", http.StatusMethodNotAllowed)
@@ -103,7 +92,7 @@ func (h *CredentialHandler) IssueOAuthCredential(w http.ResponseWriter, r *http.
 		http.Error(w, "Failed to issue policyCredential: "+err.Error(), http.StatusInternalServerError)
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(models.IssueOAuthCredentialResponse{OAuthCredential: userCredential, PolicyCredential: policyCredential})
+	json.NewEncoder(w).Encode(models.IssueOAuthCredential{OAuthCredential: userCredential, PolicyCredential: policyCredential})
 }
 
 // RevokeOAuthCredential godoc

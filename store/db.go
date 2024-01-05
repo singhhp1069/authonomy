@@ -51,11 +51,12 @@ func (s *Store) SetApp(app models.ApplicationResponse) error {
 		if err != nil {
 			return err
 		}
-		encryptedAppJSON, err := utils.EncryptData(appJSON, s.secret)
-		if err != nil {
-			return err
-		}
-		return txn.Set([]byte(app_prefix+app.AppDID), encryptedAppJSON)
+		// secret can be use to encryption
+		// encryptedAppJSON, err := utils.EncryptData(appJSON, s.secret)
+		// if err != nil {
+		// 	return err
+		// }
+		return txn.Set([]byte(app_prefix+app.AppDID), appJSON)
 	})
 }
 
@@ -69,12 +70,12 @@ func (s *Store) GetApp(appID string) (*models.ApplicationResponse, error) {
 		}
 
 		return item.Value(func(val []byte) error {
-			// Decrypt data
-			decryptedVal, err := utils.DecryptData(val, s.secret)
-			if err != nil {
-				return err
-			}
-			return json.Unmarshal(decryptedVal, &app)
+			// // Decrypt data
+			// decryptedVal, err := utils.DecryptData(val, s.secret)
+			// if err != nil {
+			// 	return err
+			// }
+			return json.Unmarshal(val, &app)
 		})
 	})
 	if err != nil {
@@ -240,6 +241,7 @@ func (s *Store) GetAllPolicies() ([]models.PolicySchemaResponse, error) {
 	return policies, nil
 }
 
+// SetProviderSchema sets provider schema details.
 func (s *Store) SetProviderSchema(prov models.ProviderSchema) error {
 	return s.db.Update(func(txn *badger.Txn) error {
 		appJSON, err := json.Marshal(prov)
@@ -250,6 +252,7 @@ func (s *Store) SetProviderSchema(prov models.ProviderSchema) error {
 	})
 }
 
+// GetProviderSchema get provider schema details.
 func (s *Store) GetProviderSchema(provider string) (*models.ProviderSchema, error) {
 	var prov models.ProviderSchema
 	err := s.db.View(func(txn *badger.Txn) error {

@@ -10,10 +10,11 @@ import (
 
 	_ "authonomy/docs" // Swaggo generates docs in this package
 
+	"github.com/google/uuid"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-func Start(dbPath, secret, apiKey, port, ssiUrl string, reset bool) {
+func Start(dbPath, secret, port, ssiUrl string, reset bool) {
 	// Initialize the data store (e.g., database connection)
 	store, err := store.NewStore(dbPath, secret)
 	if err != nil {
@@ -35,7 +36,8 @@ func Start(dbPath, secret, apiKey, port, ssiUrl string, reset bool) {
 			log.Fatalf("Failed to create policies: %v", err)
 		}
 	}
-
+	// generate a new api key
+	apiKey := uuid.New().String()
 	fmt.Println("=======================")
 	fmt.Println("\033[32m", "------x-api-key------", "\033[0m")
 	fmt.Println("\033[32m", apiKey, "\033[0m")
@@ -52,7 +54,7 @@ func Start(dbPath, secret, apiKey, port, ssiUrl string, reset bool) {
 	credentialHandler := handlers.NewCredentialHandler(ssiService, store)
 	authHandler := handlers.NewAuthHandler(ssiService, store)
 	// Swagger endpoint
-	url := httpSwagger.URL("http://localhost:8081/swagger/doc.json") // The url pointing to API definition
+	url := httpSwagger.URL("http://localhost" + port + "/swagger/doc.json")
 	http.Handle("/swagger/", httpSwagger.Handler(
 		url, //The url pointing to API definition
 	))
@@ -73,7 +75,7 @@ func Start(dbPath, secret, apiKey, port, ssiUrl string, reset bool) {
 	http.HandleFunc("/revoke-credential", m.ChainMiddleware(m.XApiKeyMiddleware, m.LoggingMiddleware)(credentialHandler.RevokeOAuthCredential))
 
 	// application itself access
-	http.HandleFunc("/validate-access", m.ChainMiddleware(m.LoggingMiddleware)(authHandler.VerifyAccess))
+	http.HandleFunc("/verify-access", m.ChainMiddleware(m.LoggingMiddleware)(authHandler.VerifyAccess))
 	http.HandleFunc("/issue-credential", m.ChainMiddleware(m.EnableCORS, m.LoggingMiddleware)(credentialHandler.IssueOAuthCredential))
 	// application user access
 	http.HandleFunc("/callback/", m.ChainMiddleware(m.EnableCORS, m.LoggingMiddleware)(callbackHandler.HandleCallback))
@@ -82,7 +84,7 @@ func Start(dbPath, secret, apiKey, port, ssiUrl string, reset bool) {
 
 	http.HandleFunc("/get-access-token", m.ChainMiddleware(m.LoggingMiddleware)(authHandler.GetAccessToken))
 	http.HandleFunc("/request-access", m.ChainMiddleware(m.LoggingMiddleware)(authHandler.RequestAccess))
-
+	http.HandleFunc("/get-access-list", m.ChainMiddleware(m.LoggingMiddleware)(authHandler.GetAccessList))
 	// static web page for access_token
 	fs := http.FileServer(http.Dir("web"))
 	http.Handle("/web/", http.StripPrefix("/web/", fs))

@@ -19,8 +19,10 @@ COPY --from=builder /app/build/authonomy .
 
 COPY --from=builder /app/config.yaml .
 
+COPY --from=builder /app/web ./web
+
 # sample schemas
-COPY --from=builder /app/sample_schema ./sample_schema
+COPY --from=builder /app/ssi/schemas ./ssi/schemas
 
 EXPOSE 8081
 

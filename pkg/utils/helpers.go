@@ -24,6 +24,7 @@ type HTTPResponse struct {
 	StatusCode int
 }
 
+// SendHTTPRequest is http request helper function.
 func SendHTTPRequest(method, url string, body *bytes.Buffer) (*HTTPResponse, error) {
 	var req *http.Request
 	var err error
@@ -64,6 +65,8 @@ func SendHTTPRequest(method, url string, body *bytes.Buffer) (*HTTPResponse, err
 	}, nil
 }
 
+// ParseVerifiableCredentialFromJWT parse the credential from the JWT.
+// this code it taken from the tbd web5 ssi service.
 func ParseVerifiableCredentialFromJWT(token string) (jws.Headers, jwt.Token, *credential.VerifiableCredential, error) {
 	parsed, err := jwt.Parse([]byte(token), jwt.WithValidate(false), jwt.WithVerify(false))
 	if err != nil {

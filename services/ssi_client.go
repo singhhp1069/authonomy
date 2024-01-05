@@ -36,20 +36,20 @@ func CreateDemoPolicies(client *SsiClient, db *store.Store) error {
 		return err
 	}
 	// set RBAC policy
-	policy, err := client.createPolicyFromFile(filepath.Join(path, "sample_schema", "rbac.json"), db)
+	policy, err := client.createPolicyFromFile(filepath.Join(path, "ssi", "schemas", "rbac.json"), db)
 	if err != nil {
 		return fmt.Errorf("error creating policy from file %v", err)
 	}
 	db.SetPolicy(policy)
 	// set ABAC policy
-	policy, err = client.createPolicyFromFile(filepath.Join(path, "sample_schema", "abac.json"), db)
+	policy, err = client.createPolicyFromFile(filepath.Join(path, "ssi", "schemas", "abac.json"), db)
 	if err != nil {
 		return fmt.Errorf("error creating policy from file %v", err)
 	}
 	db.SetPolicy(policy)
 
 	// set OAuth2 user info schema
-	policy, err = client.createPolicyFromFile(filepath.Join(path, "sample_schema", "oauth_info.json"), db)
+	policy, err = client.createPolicyFromFile(filepath.Join(path, "ssi", "schemas", "oauth_info.json"), db)
 	if err != nil {
 		return fmt.Errorf("error creating policy from file %v", err)
 	}
@@ -57,6 +57,7 @@ func CreateDemoPolicies(client *SsiClient, db *store.Store) error {
 	return db.SetProviderSchema(models.ProviderSchema{ProviderName: "facebook", SchemaID: policy.ID})
 }
 
+// createPolicyFromFile create a policy from a json file path.
 func (client *SsiClient) createPolicyFromFile(filePath string, db *store.Store) (schemaRep models.PolicySchemaResponse, err error) {
 	// Read the JSON file
 	fileBytes, err := os.ReadFile(filePath)

@@ -79,7 +79,6 @@
                 <input type="text" id="userDid" class="form-control mb-3" placeholder="Enter your DID">
 
                 <button class="btn btn-custom btn-issue" onclick="issueCredential()">Issue</button>
-                <button class="btn btn-custom btn-create" onclick="createDid()">Create DID</button>
                 <button class="btn btn-custom btn-cancel" onclick="cancel()">Cancel</button>
             </div>
         </div>
@@ -99,12 +98,11 @@
             var queryParams = new URLSearchParams(window.location.search);
             var type = queryParams.get('type');
             var appDid = queryParams.get('app_did');
-            // var sessionToken = queryParams.get('session_token');
-
+            var appSecret = queryParams.get('app_secret');
             if (type === 'login') {
                 showLoading(true);
                 // Make a request to the /signup endpoint
-                fetch('/signup?app_did=' + appDid)
+                fetch('/signup?app_did=' + appDid + '&app_secret=' + appSecret)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -126,19 +124,10 @@
                 var hash = window.location.hash.substr(1);
                 var fragmentParams = new URLSearchParams(hash);
                 var accessToken = fragmentParams.get('access_token');
-                fetchUserInfo(provider, accessToken); // Implement this function to fetch user info
+                fetchUserInfo(provider, accessToken);
+
             }
         });
-
-        function createDid() {
-    // Logic to create a DID
-    // For demonstration purposes, this will just log a message
-    console.log("Creating a new DID...");
-    // You can replace this with actual logic to create a DID
-    // and then update the input field with the new DID
-    var newDid = "did:key:exampleNewDid"; // This should be the actual new DID
-    document.getElementById('userDid').value = newDid;
-}
 
         function showLoading(isLoading) {
             document.getElementById('loadingSection').style.display = isLoading ? 'block' : 'none';

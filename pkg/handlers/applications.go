@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator"
+	"github.com/google/uuid"
 )
 
 // AppHandler handles application-related requests
@@ -86,6 +87,7 @@ func (h *AppHandler) createApplication(w http.ResponseWriter, r *http.Request) {
 		AppDID:     did,
 		AppName:    appReq.AppName,
 		AppDetails: appReq.AppDetails,
+		AppSceret:  uuid.New().String(),
 	}
 	err = h.db.SetApp(response)
 	if err != nil {

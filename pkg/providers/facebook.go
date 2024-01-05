@@ -12,6 +12,7 @@ type FacebookUserInfo struct {
 	Name string `json:"name"`
 }
 
+// GetUserInfo gets the user info from the facebook provided access token.
 func GetUserInfo(provider, accessToken string) (*FacebookUserInfo, error) {
 	if provider != "facebook" {
 		// Handle other providers or return an error
