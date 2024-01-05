@@ -1,0 +1,25 @@
+title: Authonomy
+description: >-
+  Revolutionizing Authorization Management for Developers.
+baseurl: "/authonomy"
+url: "https://singhhp1069.github.io"
+
+# Build settings
+markdown: kramdown
+theme: minima
+plugins:
+  - jekyll-feed
+
+# Exclude from production build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .jekyll-cache
+  - .sass-cache
+
+collections:
+  markdown:
+    output: true
+    permalink: /:collection/:path/
