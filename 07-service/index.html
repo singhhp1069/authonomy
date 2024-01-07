@@ -191,7 +191,7 @@
         
   
   <span class="md-ellipsis">
-    Authonomy: Revolutionizing Authorization Management for Developers
+    Introduction
   </span>
   
 
@@ -536,8 +536,8 @@
 <h2 id="overview">Overview</h2>
 <p>The <code>Start</code> function initializes and runs the Authonomy service. It sets up the data store, initializes services with dependencies, and configures HTTP handlers and routes for the service's API. The function also integrates Swagger for API documentation and handles both the application's internal operations and user interactions.</p>
 <h2 id="function-signature">Function Signature</h2>
-<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">Start</span><span class="p">(</span><span class="nx">dbPath</span><span class="p">,</span><span class="w"> </span><span class="nx">secret</span><span class="p">,</span><span class="w"> </span><span class="nx">port</span><span class="p">,</span><span class="w"> </span><span class="nx">ssiUrl</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">reset</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span>
-</code></pre></div>
+<pre><code class="language-go">func Start(dbPath, secret, port, ssiUrl string, reset bool)
+</code></pre>
 <h3 id="parameters">Parameters</h3>
 <ul>
 <li><code>dbPath</code> (string): Path to the database.</li>
@@ -557,22 +557,22 @@
 <li><code>Server Startup</code>: Starts the HTTP server on the specified port.</li>
 </ul>
 <h3 id="endpoints">Endpoints</h3>
-<div class="highlight"><pre><span></span><code>/applications:<span class="w"> </span>Manage<span class="w"> </span>applications.
-/auth-provider:<span class="w"> </span>Get,<span class="w"> </span>link,<span class="w"> </span>and<span class="w"> </span>unlink<span class="w"> </span>authentication<span class="w"> </span>providers.
-/policies:<span class="w"> </span>Get,<span class="w"> </span>create,<span class="w"> </span>and<span class="w"> </span>attach<span class="w"> </span>policies.
-/grant-access,<span class="w"> </span>/revoke-access:<span class="w"> </span>Manage<span class="w"> </span>access<span class="w"> </span>grants.
-/verify-access,<span class="w"> </span>/issue-credential:<span class="w"> </span>Verify<span class="w"> </span>access<span class="w"> </span>and<span class="w"> </span>issue<span class="w"> </span>credentials.
-/callback/:<span class="w"> </span>Handle<span class="w"> </span>callback<span class="w"> </span>operations.
-/me/:<span class="w"> </span>User-related<span class="w"> </span>operations.
-/signup:<span class="w"> </span>Sign<span class="w"> </span>up<span class="w"> </span>handler.
-/get-access-token:<span class="w"> </span>Retrieve<span class="w"> </span>access<span class="w"> </span>tokens.
-/request-access:<span class="w"> </span>Request<span class="w"> </span>access<span class="w"> </span>to<span class="w"> </span>resources.
-/get-access-list:<span class="w"> </span>Get<span class="w"> </span>a<span class="w"> </span>list<span class="w"> </span>of<span class="w"> </span>access<span class="w"> </span>grants.
-</code></pre></div>
+<pre><code class="language-sh">/applications: Manage applications.
+/auth-provider: Get, link, and unlink authentication providers.
+/policies: Get, create, and attach policies.
+/grant-access, /revoke-access: Manage access grants.
+/verify-access, /issue-credential: Verify access and issue credentials.
+/callback/: Handle callback operations.
+/me/: User-related operations.
+/signup: Sign up handler.
+/get-access-token: Retrieve access tokens.
+/request-access: Request access to resources.
+/get-access-list: Get a list of access grants.
+</code></pre>
 <h3 id="usage-example">Usage Example</h3>
 <p>To start the Authonomy service:</p>
-<div class="highlight"><pre><span></span><code>Start<span class="o">(</span><span class="s2">&quot;/path/to/db&quot;</span>,<span class="w"> </span><span class="s2">&quot;secretKey&quot;</span>,<span class="w"> </span><span class="s2">&quot;:8080&quot;</span>,<span class="w"> </span><span class="s2">&quot;http://ssi-service-url&quot;</span>,<span class="w"> </span><span class="nb">false</span><span class="o">)</span>
-</code></pre></div>
+<pre><code class="language-sh">Start(&quot;/path/to/db&quot;, &quot;secretKey&quot;, &quot;:8080&quot;, &quot;http://ssi-service-url&quot;, false)
+</code></pre>
 <p>This will start the service on port 8080, using the specified database path and SSI service URL, without resetting the database.</p>
 <p>For detailed API usage and examples, refer to the Swagger documentation at <code>http://localhost:[port]/swagger</code>.</p>
 

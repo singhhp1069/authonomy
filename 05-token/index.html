@@ -191,7 +191,7 @@
         
   
   <span class="md-ellipsis">
-    Authonomy: Revolutionizing Authorization Management for Developers
+    Introduction
   </span>
   
 
@@ -704,8 +704,8 @@
 <li><strong>Failure</strong>: An error if the token signing process fails.</li>
 </ul>
 <h3 id="example">Example</h3>
-<div class="highlight"><pre><span></span><code><span class="nx">tokenString</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">CreateAccessToken</span><span class="p">(</span><span class="nx">appDID</span><span class="p">,</span><span class="w"> </span><span class="nx">credentialJWTs</span><span class="p">)</span>
-</code></pre></div>
+<pre><code class="language-go">tokenString, err := CreateAccessToken(appDID, credentialJWTs)
+</code></pre>
 <h2 id="function-validateaccesstoken">Function: ValidateAccessToken</h2>
 <h3 id="purpose_1">Purpose</h3>
 <p>Validates a given JWT token string and extracts the custom claims.</p>
@@ -724,8 +724,8 @@
 <li><strong>Success</strong>: The CustomClaims if the token is valid.</li>
 <li><strong>Failure</strong>: An error if the token is invalid or parsing fails.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="nx">claims</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ValidateAccessToken</span><span class="p">(</span><span class="nx">tokenString</span><span class="p">)</span>
-</code></pre></div>
+<pre><code class="language-go">claims, err := ValidateAccessToken(tokenString)
+</code></pre>
 <h2 id="security-considerations">Security Considerations</h2>
 <ul>
 <li>The JWT secret key should be securely stored and managed.</li>

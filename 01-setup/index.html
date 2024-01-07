@@ -191,7 +191,7 @@
         
   
   <span class="md-ellipsis">
-    Authonomy: Revolutionizing Authorization Management for Developers
+    Introduction
   </span>
   
 
@@ -281,15 +281,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#access-the-service" class="md-nav__link">
-    Access the service
+  <a href="#get-the-api-key-and-access-the-api-in-swagger" class="md-nav__link">
+    Get the API key and access the API in swagger
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#authonomy-sdk" class="md-nav__link">
-    Authonomy SDK
+  <a href="#access-the-service" class="md-nav__link">
+    Access the service
   </a>
   
 </li>
@@ -496,15 +496,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#access-the-service" class="md-nav__link">
-    Access the service
+  <a href="#get-the-api-key-and-access-the-api-in-swagger" class="md-nav__link">
+    Get the API key and access the API in swagger
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#authonomy-sdk" class="md-nav__link">
-    Authonomy SDK
+  <a href="#access-the-service" class="md-nav__link">
+    Access the service
   </a>
   
 </li>
@@ -536,9 +536,9 @@
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Docker and Docker-compose installed on your machine.</p>
 <h3 id="clone-the-repository">Clone the repository</h3>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/singhhp1069/authonomy.git
-<span class="nb">cd</span><span class="w"> </span>authonomy
-</code></pre></div>
+<pre><code class="language-sh">git clone https://github.com/singhhp1069/authonomy.git
+cd authonomy
+</code></pre>
 <h3 id="create-a-configyaml-file">Create a <code>config.yaml</code> file</h3>
 <ul>
 <li>Use the provided configuration or adjust it according to your needs.</li>
@@ -549,10 +549,32 @@
 <li>Use the docker-compose.yml file provided in the repository.</li>
 <li>Run the following command:</li>
 </ul>
-<div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>--build
-</code></pre></div>
+<pre><code class="language-sh">docker-compose up --build
+</code></pre>
+<h3 id="get-the-api-key-and-access-the-api-in-swagger">Get the API key and access the API in swagger</h3>
+<ul>
+<li>check all the running containers and inspect authonomy service</li>
+</ul>
+<pre><code class="language-sh">docker ps -a
+docker inspect {container_id}
+</code></pre>
+<p>you will get the api key for the service and the open api swagger url as show below in the image.</p>
+<p><img alt="Docker inspect" src="../images/docker.png" /></p>
 <h3 id="access-the-service">Access the service</h3>
-<h3 id="authonomy-sdk">Authonomy SDK</h3>
+<p>To access the service you can visit</p>
+<pre><code class="language-sh">http://localhost:8081/swagger
+</code></pre>
+<p>and use the <code>x-api-key</code> what you got from the previous step.</p>
+<p><img alt="Swagger" src="../images/swagger.png" /></p>
+<p>As a developer the further steps:</p>
+<ol>
+<li>Setting up an application</li>
+<li>Link the Authentication Provider (e.g., facebook)</li>
+<li>Attach policy to the application (e.g., RBAC schema policy)</li>
+<li>Now you are ready to use it on application.</li>
+</ol>
+<p>Complete demo video is:</p>
+<p>TODO:: video link</p>
 
 
 
