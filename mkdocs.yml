@@ -1,0 +1,20 @@
+site_name: Authonomy
+site_url: https://singhhp1069.github.io/authonomy/
+repo_url: https://github.com/singhhp1069/authonomy
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.instant
+    - navigation.tracking
+  palette:
+    primary: black
+  font:
+    text: Asap #Dosis
+    code: Share Tech Mono
+plugins:
+  - macros
+  - mermaid2
+markdown_extensions:
+  - admonition
+  - pymdownx.details

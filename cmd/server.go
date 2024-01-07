@@ -82,9 +82,9 @@ func Start(dbPath, secret, port, ssiUrl string, reset bool) {
 	http.HandleFunc("/me/", m.ChainMiddleware(m.EnableCORS, m.LoggingMiddleware)(callbackHandler.HandleMe))
 	http.HandleFunc("/signup", m.ChainMiddleware(m.EnableCORS, m.LoggingMiddleware)(authHandler.SignUpHandler))
 
-	http.HandleFunc("/get-access-token", m.ChainMiddleware(m.LoggingMiddleware)(authHandler.GetAccessToken))
-	http.HandleFunc("/request-access", m.ChainMiddleware(m.LoggingMiddleware)(authHandler.RequestAccess))
-	http.HandleFunc("/get-access-list", m.ChainMiddleware(m.LoggingMiddleware)(authHandler.GetAccessList))
+	http.HandleFunc("/get-access-token", m.ChainMiddleware(m.EnableCORS, m.LoggingMiddleware)(authHandler.GetAccessToken))
+	http.HandleFunc("/request-access", m.ChainMiddleware(m.EnableCORS, m.LoggingMiddleware)(authHandler.RequestAccess))
+	http.HandleFunc("/get-access-list", m.ChainMiddleware(m.EnableCORS, m.LoggingMiddleware)(authHandler.GetAccessList))
 	// static web page for access_token
 	fs := http.FileServer(http.Dir("web"))
 	http.Handle("/web/", http.StripPrefix("/web/", fs))

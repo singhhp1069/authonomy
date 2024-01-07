@@ -43,12 +43,6 @@
             color: white;
         }
 
-        .btn-create {
-            background-color: #80c011;
-            border-color: #11ea43;
-            color: white;
-        }
-
         .btn-cancel {
             background-color: #dc3545;
             border-color: #dc3545;
@@ -61,10 +55,24 @@
             color: #666;
             margin-top: 40px;
         }
+        .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+    }
+
+    .center-logo {
+        max-width: 300px;
+        height: auto;
+    }
     </style>
 </head>
 
 <body>
+    <div class="logo-container">
+        <img src="./assets/logo.png" alt="Authonomy Logo" class="center-logo">
+    </div>
     <div id="loadingSection" style="display: none;">
         <div class="text-center">
             <p>Loading...</p>
@@ -83,7 +91,7 @@
             </div>
         </div>
         <div class="footer">
-            <p>&copy; 2024 My Application</p>
+            <p>&copy; 2024 Authonomy</p>
         </div>
     </div>
 
@@ -93,40 +101,50 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
         let userInfoGlobal = {};
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length === 2) return decodeURIComponent(parts.pop().split(";").shift());
+            return null;
+        }
         document.addEventListener("DOMContentLoaded", function () {
             // Capture initial query parameters
             var queryParams = new URLSearchParams(window.location.search);
             var type = queryParams.get('type');
+            var origin = getCookie('origin');
             var appDid = queryParams.get('app_did');
             var appSecret = queryParams.get('app_secret');
-            if (type === 'login') {
-                showLoading(true);
-                // Make a request to the /signup endpoint
-                fetch('/signup?app_did=' + appDid + '&app_secret=' + appSecret)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Assuming 'data' contains the redirect URL
-                        window.location.href = data.redirect_url;
-                    })
-                    .catch(error => {
-                        console.error('Signup error:', error);
-                    });
-            } else {
-                showLoading(false);
-                // Existing logic for handling the callback
-                var provider = queryParams.get('provider');
-                var did = queryParams.get('did');
-                var hash = window.location.hash.substr(1);
-                var fragmentParams = new URLSearchParams(hash);
-                var accessToken = fragmentParams.get('access_token');
-                fetchUserInfo(provider, accessToken);
+            console.log("origin 1", origin);
+            setTimeout(function () {
+                if (type === 'login') {
+                    showLoading(true);
+                    // Make a request to the /signup endpoint
+                    fetch('/signup?app_did=' + appDid + '&app_secret=' + appSecret)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Assuming 'data' contains the redirect URL
+                            window.location.href = data.redirect_url;
+                        })
+                        .catch(error => {
+                            console.error('Signup error:', error);
+                        });
+                } else {
+                    showLoading(false);
+                    // Existing logic for handling the callback
+                    var provider = queryParams.get('provider');
+                    var did = queryParams.get('did');
+                    var hash = window.location.hash.substr(1);
+                    var fragmentParams = new URLSearchParams(hash);
+                    var accessToken = fragmentParams.get('access_token');
+                    fetchUserInfo(provider, accessToken);
 
-            }
+                }
+            }, 1000);
         });
 
         function showLoading(isLoading) {
@@ -193,16 +211,27 @@
                     return response.json();
                 })
                 .then(data => {
+                    var origin = getCookie('origin');
+                    console.log('Sending message to origin:', origin);
                     console.log('Credential Issued:', data);
-                    window.CloseWebView.postMessage(data);
+                    if (origin) {
+                        window.opener.postMessage(data, origin); // Use the stored origin
+                    }
+                    window.close();
                 })
                 .catch(error => {
-                    console.error('Issue credential error:', error);
-                    document.getElementById('credentialInfo').innerText = 'Failed to issue credential';
+                    var origin = getCookie('origin');
+                    console.log('Sending message to origin:', origin);
+                    console.log('Credential canel:',);
+                    if (origin) {
+                        window.opener.postMessage("cancel", origin); // Use the stored origin
+                    }
+                    window.close();
                 });
         }
         function cancel() {
-            window.CloseWebView.postMessage('Cancel');
+            window.opener.postMessage("cancel", origin);
+            window.close();
         }
     </script>
 </body>

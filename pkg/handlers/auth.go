@@ -222,6 +222,8 @@ func (h *AuthHandler) RevokeAccess(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param Authorization header string true "Authorization token" default(Bearer YOUR_ACCESS_TOKEN)
+// @Param app_did query string true "Application DID"
+// @Param app_secret query string true "Application Secret"
 // @Param attribute query string false "e.g.; Role to check access for"
 // @Success 200 {string} string "success"
 // @Failure 400 {string} string "Bad request"
@@ -306,6 +308,8 @@ func (h *AuthHandler) VerifyAccess(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param Authorization header string true "Authorization token" default(Bearer YOUR_ACCESS_TOKEN)
+// @Param app_did query string true "Application DID"
+// @Param app_secret query string true "Application Secret"
 // @Success 200 {string} string "success"
 // @Failure 400 {string} string "Bad request"
 // @Failure 401 {string} string "Unauthorized"

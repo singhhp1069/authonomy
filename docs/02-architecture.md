@@ -1,4 +1,4 @@
-# Authonomy System Architecture
+# Architecture
 
 ## Overview
 
@@ -17,8 +17,11 @@ B --> C{Authentication Providers}
 B --> D{Authorization Management}
 D --> E[DIDs]
 D --> F[VCs/VPs]
-C --> G[Google, Facebook, etc.]
-F --> I[Access Control Policies]
+C --> G{type: social}
+C --> H{type: passwordless}
+G --> J[facebook:OAuth2, google: OpenID, ...]
+H --> K[email:SMTP, phoneOTP: verification, ...]
+F --> I[Access Control Policies e.g.; RBAC, ABAC, KYC etc]
 ```
 
 ## Authentication and Authorization Flow
@@ -39,20 +42,7 @@ M->>P: Use Authentication Provider
 P-->>M: Authentication Response
 M->>D: Request Authorization (DID, VCs/VPs)
 D-->>M: Authorization Response
-M-->>A: Access Granted/Denied
-```
-
-## Decentralized Authorization Process
-
-This graph demonstrates the process of decentralized authorization in Authonomy, highlighting the roles of policy engines, blockchain/DLT, and VC services.
-
-```mermaid
-graph TD
-A[Application Request] -->|DID/VCs| B[Authonomy Middleware]
-B -->|Verify Policies| C[Policy Engine]
-C -->|Policy Decision| D[Access Granted/Denied]
-B -->|Manage DIDs| 
-B -->|Issue/Validate VCs| F[VC Service]
+M-->>A: Issue Policy Credential
 ```
 
 ## Integration in Application Development

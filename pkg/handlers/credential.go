@@ -49,20 +49,25 @@ func (h *CredentialHandler) IssueOAuthCredential(w http.ResponseWriter, r *http.
 	isSchemaExist := h.ssiService.IsSchemaExists(schema.SchemaID)
 	if !isSchemaExist {
 		http.Error(w, "Failed to get schema ID: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
+
 	app, err := h.db.GetApp(credReq.AppDID)
 	if err != nil {
 		http.Error(w, "Failed to get application DID: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	policy, err := h.db.GetIssuedPolicy(app.AppDID)
 	if err != nil {
 		http.Error(w, "Failed to get application policy: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	isDIDExits := h.ssiService.IsDIDExists(credReq.AppDID)
 	if !isDIDExits {
 		http.Error(w, "Failed to get application DID: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 	userInfo, err := providers.GetUserInfo("facebook", credReq.AccessToken)
 	if err != nil {
@@ -72,11 +77,13 @@ func (h *CredentialHandler) IssueOAuthCredential(w http.ResponseWriter, r *http.
 	userCredMap, err := models.StructToMap(models.UserInfo{UserID: userInfo.ID, Name: userInfo.Name})
 	if err != nil {
 		http.Error(w, "Failed to convert to map: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 	// TODO:: revokable
 	userCredential, err := h.ssiService.IssueCredentialBySchemaID(app.AppDID, credReq.UserDID, schema.SchemaID, userCredMap)
 	if err != nil {
 		http.Error(w, "Failed to issue userCredential: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 	// default role as user (hardcoded for the hackathon demo)
 	userRole := models.Role{
@@ -86,10 +93,12 @@ func (h *CredentialHandler) IssueOAuthCredential(w http.ResponseWriter, r *http.
 	policyCredMap, err := models.StructToMap(models.RolesWrapper{Roles: []models.Role{userRole}})
 	if err != nil {
 		http.Error(w, "Failed to convert to map: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 	policyCredential, err := h.ssiService.IssueCredentialBySchemaID(app.AppDID, credReq.UserDID, policy.SchemaID, policyCredMap)
 	if err != nil {
 		http.Error(w, "Failed to issue policyCredential: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(models.IssueOAuthCredential{OAuthCredential: userCredential, PolicyCredential: policyCredential})

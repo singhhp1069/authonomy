@@ -1,6 +1,6 @@
-# Authonomy: Revolutionizing Authorization Management for Developers
+# Introduction
 
-## Introduction
+![logo](./images/logo.png)
 
 Authonomy is an innovative middleware designed to revolutionize authorization management in application development. By separating authentication from authorization, it empowers developers to leverage existing authentication methods while harnessing the benefits of decentralized authorization through DIDs (Decentralized Identifiers), VCs (Verifiable Credentials), and VPs (Verifiable Presentations).
 
@@ -32,8 +32,6 @@ Authonomy introduces a paradigm shift, allowing application developers to contin
 - **Content Management Systems**: Control editing, publishing, and viewing permissions with VCs.
 - **Healthcare Applications**: Manage patient and practitioner access to records with granular control.
 - **Educational Tech Platforms**: Implement role-based access with easy integration into existing systems.
-
-## Conclusion
 
 Authonomy offers a unique solution that aligns with the evolving needs of application developers, enhancing both security and flexibility in authorization management. Our vision is to redefine digital identity management, ensuring a more secure, flexible, and user-centric approach.
 
