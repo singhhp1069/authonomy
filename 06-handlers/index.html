@@ -1,0 +1,1328 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://singhhp1069.github.io/authonomy/06-handlers/">
+      
+      
+        <link rel="prev" href="../05-token/">
+      
+      
+        <link rel="next" href="../07-service/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.3.1">
+    
+    
+      
+        <title>Service Handlers - Authonomy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.046329b4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.85d0ee34.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap:300,300i,400,400i,700,700i%7CShare+Tech+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Asap";--md-code-font:"Share Tech Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#service-handlers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Authonomy" class="md-header__button md-logo" aria-label="Authonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Authonomy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Service Handlers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/singhhp1069/authonomy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Authonomy" class="md-nav__button md-logo" aria-label="Authonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Authonomy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/singhhp1069/authonomy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authonomy: Revolutionizing Authorization Management for Developers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-cmd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command-Line Interface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Service Models
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-token/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Access Token Generation and Validation Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Service Handlers
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Service Handlers
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handlers" class="md-nav__link">
+    Handlers
+  </a>
+  
+    <nav class="md-nav" aria-label="Handlers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apphandler" class="md-nav__link">
+    AppHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="AppHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newapphandler" class="md-nav__link">
+    NewAppHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handleapplications" class="md-nav__link">
+    HandleApplications
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getapplications" class="md-nav__link">
+    getApplications
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createapplication" class="md-nav__link">
+    createApplication
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authhandler" class="md-nav__link">
+    AuthHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="AuthHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newauthhandler" class="md-nav__link">
+    NewAuthHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signuphandler" class="md-nav__link">
+    SignUpHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getaccesstoken" class="md-nav__link">
+    GetAccessToken
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestaccess" class="md-nav__link">
+    RequestAccess
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grandaccess" class="md-nav__link">
+    GrandAccess
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revokeaccess" class="md-nav__link">
+    RevokeAccess
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifyaccess" class="md-nav__link">
+    VerifyAccess
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getaccesslist" class="md-nav__link">
+    GetAccessList
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callbackhandler" class="md-nav__link">
+    CallbackHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="CallbackHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newcallbackhandler" class="md-nav__link">
+    NewCallbackHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handlecallback" class="md-nav__link">
+    HandleCallback
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handleme" class="md-nav__link">
+    HandleMe
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credentialhandler" class="md-nav__link">
+    CredentialHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="CredentialHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newcredentialhandler" class="md-nav__link">
+    NewCredentialHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issueoauthcredential" class="md-nav__link">
+    IssueOAuthCredential
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revokeoauthcredential" class="md-nav__link">
+    RevokeOAuthCredential
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#middlewareservice" class="md-nav__link">
+    MiddlewareService
+  </a>
+  
+    <nav class="md-nav" aria-label="MiddlewareService">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newmiddlewareservice" class="md-nav__link">
+    NewMiddlewareService
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enablecors" class="md-nav__link">
+    EnableCORS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xapikeymiddleware" class="md-nav__link">
+    XApiKeyMiddleware
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loggingmiddleware" class="md-nav__link">
+    LoggingMiddleware
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chainmiddleware" class="md-nav__link">
+    ChainMiddleware
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policyhandler" class="md-nav__link">
+    PolicyHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="PolicyHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newpolicyhandler" class="md-nav__link">
+    NewPolicyHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getpolicyhandler" class="md-nav__link">
+    GetPolicyHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createpolicyhandler" class="md-nav__link">
+    CreatePolicyHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attachpolicyhandler" class="md-nav__link">
+    AttachPolicyHandler
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authproviderhandler" class="md-nav__link">
+    AuthProviderHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="AuthProviderHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newauthproviderhandler" class="md-nav__link">
+    NewAuthProviderHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getauthconnectorhandler" class="md-nav__link">
+    GetAuthConnectorHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linkauthproviderhandler" class="md-nav__link">
+    LinkAuthProviderHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unlinkauthproviderhandler" class="md-nav__link">
+    UnLinkAuthProviderHandler
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-service/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Function
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Supported Policy Schemas and Authentication Methods
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handlers" class="md-nav__link">
+    Handlers
+  </a>
+  
+    <nav class="md-nav" aria-label="Handlers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apphandler" class="md-nav__link">
+    AppHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="AppHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newapphandler" class="md-nav__link">
+    NewAppHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handleapplications" class="md-nav__link">
+    HandleApplications
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getapplications" class="md-nav__link">
+    getApplications
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createapplication" class="md-nav__link">
+    createApplication
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authhandler" class="md-nav__link">
+    AuthHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="AuthHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newauthhandler" class="md-nav__link">
+    NewAuthHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signuphandler" class="md-nav__link">
+    SignUpHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getaccesstoken" class="md-nav__link">
+    GetAccessToken
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestaccess" class="md-nav__link">
+    RequestAccess
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grandaccess" class="md-nav__link">
+    GrandAccess
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revokeaccess" class="md-nav__link">
+    RevokeAccess
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifyaccess" class="md-nav__link">
+    VerifyAccess
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getaccesslist" class="md-nav__link">
+    GetAccessList
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callbackhandler" class="md-nav__link">
+    CallbackHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="CallbackHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newcallbackhandler" class="md-nav__link">
+    NewCallbackHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handlecallback" class="md-nav__link">
+    HandleCallback
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handleme" class="md-nav__link">
+    HandleMe
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credentialhandler" class="md-nav__link">
+    CredentialHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="CredentialHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newcredentialhandler" class="md-nav__link">
+    NewCredentialHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issueoauthcredential" class="md-nav__link">
+    IssueOAuthCredential
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revokeoauthcredential" class="md-nav__link">
+    RevokeOAuthCredential
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#middlewareservice" class="md-nav__link">
+    MiddlewareService
+  </a>
+  
+    <nav class="md-nav" aria-label="MiddlewareService">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newmiddlewareservice" class="md-nav__link">
+    NewMiddlewareService
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enablecors" class="md-nav__link">
+    EnableCORS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xapikeymiddleware" class="md-nav__link">
+    XApiKeyMiddleware
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loggingmiddleware" class="md-nav__link">
+    LoggingMiddleware
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chainmiddleware" class="md-nav__link">
+    ChainMiddleware
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policyhandler" class="md-nav__link">
+    PolicyHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="PolicyHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newpolicyhandler" class="md-nav__link">
+    NewPolicyHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getpolicyhandler" class="md-nav__link">
+    GetPolicyHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createpolicyhandler" class="md-nav__link">
+    CreatePolicyHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attachpolicyhandler" class="md-nav__link">
+    AttachPolicyHandler
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authproviderhandler" class="md-nav__link">
+    AuthProviderHandler
+  </a>
+  
+    <nav class="md-nav" aria-label="AuthProviderHandler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#newauthproviderhandler" class="md-nav__link">
+    NewAuthProviderHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getauthconnectorhandler" class="md-nav__link">
+    GetAuthConnectorHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linkauthproviderhandler" class="md-nav__link">
+    LinkAuthProviderHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unlinkauthproviderhandler" class="md-nav__link">
+    UnLinkAuthProviderHandler
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="service-handlers">Service Handlers</h1>
+<h2 id="overview">Overview</h2>
+<p>The <code>handlers</code> package in the Authonomy service provides HTTP handlers for various functionalities like application management, user authentication, and access control. This package is a crucial part of the service's REST API.</p>
+<h2 id="handlers">Handlers</h2>
+<h3 id="apphandler">AppHandler</h3>
+<p>Handles application-related requests.</p>
+<h4 id="newapphandler">NewAppHandler</h4>
+<ul>
+<li><strong>Purpose</strong>: Creates a new instance of <code>AppHandler</code>.</li>
+<li><strong>Parameters</strong>: <code>ssiService</code> (<em>services.SsiClient), <code>db</code> (</em>store.Store).</li>
+</ul>
+<h4 id="handleapplications">HandleApplications</h4>
+<ul>
+<li><strong>Purpose</strong>: Routes application requests based on the HTTP method.</li>
+<li><strong>Methods</strong>: <code>GET</code> (getApplications), <code>POST</code> (createApplication).</li>
+</ul>
+<h4 id="getapplications">getApplications</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/applications</code> (GET)</li>
+<li><strong>Description</strong>: Retrieves a list of all applications.</li>
+<li><strong>Responses</strong>: 200 (Array of <code>models.ApplicationResponse</code>), 500 (Internal Server Error).</li>
+</ul>
+<h4 id="createapplication">createApplication</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/applications</code> (POST)</li>
+<li><strong>Description</strong>: Creates a new application with provided details.</li>
+<li><strong>Responses</strong>: 200 (<code>models.ApplicationResponse</code>), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<h3 id="authhandler">AuthHandler</h3>
+<p>Handles authentication-related requests.</p>
+<h4 id="newauthhandler">NewAuthHandler</h4>
+<ul>
+<li><strong>Purpose</strong>: Creates a new instance of <code>AuthHandler</code>.</li>
+<li><strong>Parameters</strong>: <code>ssiService</code> (<em>services.SsiClient), <code>db</code> (</em>store.Store).</li>
+</ul>
+<h4 id="signuphandler">SignUpHandler</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/signup</code> (GET)</li>
+<li><strong>Description</strong>: Handles the sign-up process by providing a redirect URL for authentication.</li>
+<li><strong>Responses</strong>: 200 (Redirect URL for sign-up), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<h4 id="getaccesstoken">GetAccessToken</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/get-access-token</code> (POST)</li>
+<li><strong>Description</strong>: Handles the sign-in process using application DID and credential JWT.</li>
+<li><strong>Responses</strong>: 200 (<code>models.GetAccessTokenResponse</code>), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<h4 id="requestaccess">RequestAccess</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/request-access</code> (POST)</li>
+<li><strong>Description</strong>: Initiates a request for user access (implementation pending).</li>
+<li><strong>Responses</strong>: 200 (Success), 405 (Method Not Allowed).</li>
+</ul>
+<h4 id="grandaccess">GrandAccess</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/grant-access</code> (PUT)</li>
+<li><strong>Description</strong>: Grants access based on a valid request (implementation pending).</li>
+<li><strong>Responses</strong>: 200 (Success), 405 (Method Not Allowed).</li>
+</ul>
+<h4 id="revokeaccess">RevokeAccess</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/revoke-access</code> (PUT)</li>
+<li><strong>Description</strong>: Revokes the access of a user (implementation pending).</li>
+<li><strong>Responses</strong>: 200 (Success), 405 (Method Not Allowed).</li>
+</ul>
+<h4 id="verifyaccess">VerifyAccess</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/verify-access</code> (GET)</li>
+<li><strong>Description</strong>: Verifies if a user has access to a specific resource based on their role.</li>
+<li><strong>Responses</strong>: 200 (Success), 400 (Bad Request), 401 (Unauthorized), 500 (Internal Server Error).</li>
+</ul>
+<h4 id="getaccesslist">GetAccessList</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/get-access-list</code> (GET)</li>
+<li><strong>Description</strong>: Lists the access for the user on the resource.</li>
+<li><strong>Responses</strong>: 200 (Success), 400 (Bad Request), 401 (Unauthorized), 500 (Internal Server Error).</li>
+</ul>
+<h3 id="callbackhandler">CallbackHandler</h3>
+<h4 id="newcallbackhandler">NewCallbackHandler</h4>
+<ul>
+<li><strong>Purpose</strong>: Creates a new instance of <code>CallbackHandler</code>.</li>
+</ul>
+<h4 id="handlecallback">HandleCallback</h4>
+<ul>
+<li><strong>Endpoint</strong>: Dynamic, based on provider and DID.</li>
+<li><strong>Method</strong>: GET</li>
+<li><strong>Description</strong>: Handles the OAuth callback, redirecting to a web page with query parameters including the provider and DID.</li>
+</ul>
+<h4 id="handleme">HandleMe</h4>
+<ul>
+<li><strong>Endpoint</strong>: Dynamic, based on provider and access token.</li>
+<li><strong>Method</strong>: GET</li>
+<li><strong>Description</strong>: Retrieves user information based on the provider and access token.</li>
+<li><strong>Responses</strong>: 200 (User Information), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<h3 id="credentialhandler">CredentialHandler</h3>
+<h4 id="newcredentialhandler">NewCredentialHandler</h4>
+<ul>
+<li><strong>Purpose</strong>: Creates a new instance of <code>CredentialHandler</code>.</li>
+<li><strong>Parameters</strong>: <code>ssiService</code> (<em>services.SsiClient), <code>db</code> (</em>store.Store).</li>
+</ul>
+<h4 id="issueoauthcredential">IssueOAuthCredential</h4>
+<ul>
+<li><strong>Endpoint</strong>: Unspecified (handled dynamically)</li>
+<li><strong>Method</strong>: POST</li>
+<li><strong>Description</strong>: Issues OAuth credentials based on provided request parameters.</li>
+<li><strong>Responses</strong>: 200 (Issued Credentials), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<h4 id="revokeoauthcredential">RevokeOAuthCredential</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/revoke-credential</code> (POST)</li>
+<li><strong>Description</strong>: Revokes an existing OAuth credential.</li>
+<li><strong>Responses</strong>: 200 (Success Message), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<h3 id="middlewareservice">MiddlewareService</h3>
+<h4 id="newmiddlewareservice">NewMiddlewareService</h4>
+<ul>
+<li><strong>Purpose</strong>: Creates a new instance of <code>MiddlewareService</code>.</li>
+<li><strong>Parameters</strong>: <code>apikey</code> (string).</li>
+</ul>
+<h4 id="enablecors">EnableCORS</h4>
+<ul>
+<li><strong>Purpose</strong>: Middleware to enable CORS (Cross-Origin Resource Sharing).</li>
+<li><strong>Description</strong>: Sets CORS headers and handles preflight requests.</li>
+</ul>
+<h4 id="xapikeymiddleware">XApiKeyMiddleware</h4>
+<ul>
+<li><strong>Purpose</strong>: Middleware to validate the <code>x-api-key</code> in request headers.</li>
+<li><strong>Description</strong>: Checks for a valid API key in the request headers.</li>
+</ul>
+<h4 id="loggingmiddleware">LoggingMiddleware</h4>
+<ul>
+<li><strong>Purpose</strong>: Middleware for logging each request.</li>
+<li><strong>Description</strong>: Logs the HTTP method and URL path of each request.</li>
+</ul>
+<h4 id="chainmiddleware">ChainMiddleware</h4>
+<ul>
+<li><strong>Purpose</strong>: Chains multiple middleware functions.</li>
+<li><strong>Description</strong>: Allows for easy combination of multiple middleware functions.</li>
+</ul>
+<h3 id="policyhandler">PolicyHandler</h3>
+<h4 id="newpolicyhandler">NewPolicyHandler</h4>
+<ul>
+<li><strong>Purpose</strong>: Creates a new instance of <code>PolicyHandler</code>.</li>
+<li><strong>Parameters</strong>: <code>ssiService</code> (<em>services.SsiClient), <code>db</code> (</em>store.Store).</li>
+</ul>
+<h4 id="getpolicyhandler">GetPolicyHandler</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/policies</code> (GET)</li>
+<li><strong>Description</strong>: Retrieves a list of all policies.</li>
+<li><strong>Responses</strong>: 200 (Array of <code>models.PolicySchemaResponse</code>), 500 (Internal Server Error).</li>
+</ul>
+<h4 id="createpolicyhandler">CreatePolicyHandler</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/create-policy</code> (POST)</li>
+<li><strong>Description</strong>: Creates a new policy based on the provided schema.</li>
+<li><strong>Responses</strong>: 200 (<code>models.PolicySchemaResponse</code>), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<h4 id="attachpolicyhandler">AttachPolicyHandler</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/attach-policy</code> (POST)</li>
+<li><strong>Description</strong>: Attaches a policy to an application using the provided application and issuer DID, and schema ID.</li>
+<li><strong>Responses</strong>: 200 (<code>models.ApplicationPolicyResponse</code>), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<h3 id="authproviderhandler">AuthProviderHandler</h3>
+<h4 id="newauthproviderhandler">NewAuthProviderHandler</h4>
+<ul>
+<li><strong>Purpose</strong>: Creates a new instance of <code>AuthProviderHandler</code>.</li>
+<li><strong>Parameters</strong>: <code>ssiService</code> (<em>services.SsiClient), <code>db</code> (</em>store.Store).</li>
+</ul>
+<h4 id="getauthconnectorhandler">GetAuthConnectorHandler</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/auth-provider</code> (GET)</li>
+<li><strong>Description</strong>: Retrieves a list of all auth providers.</li>
+<li><strong>Responses</strong>: 200 (Array of <code>models.AvailableProvider</code>), 500 (Internal Server Error).</li>
+</ul>
+<h4 id="linkauthproviderhandler">LinkAuthProviderHandler</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/auth-provider/link</code> (POST)</li>
+<li><strong>Description</strong>: Links an OAuth provider to an application by its DID.</li>
+<li><strong>Responses</strong>: 200 (<code>models.AuthProvider</code>), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<h4 id="unlinkauthproviderhandler">UnLinkAuthProviderHandler</h4>
+<ul>
+<li><strong>Endpoint</strong>: <code>/auth-provider/unlink</code> (POST)</li>
+<li><strong>Description</strong>: Unlinks an authentication provider from an application.</li>
+<li><strong>Responses</strong>: 200 (Success Message), 400 (Bad Request), 500 (Internal Server Error).</li>
+</ul>
+<hr />
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.instant", "navigation.tracking"], "search": "../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.dff1b7c8.min.js"></script>
+      
+    
+  </body>
+</html>

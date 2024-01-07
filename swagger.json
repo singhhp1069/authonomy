@@ -1,0 +1,1039 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/applications": {
+            "get": {
+                "description": "Retrieves a list of all applications",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Application Management"
+                ],
+                "summary": "Get all applications",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ApplicationResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new application with the given details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Application Management"
+                ],
+                "summary": "Create a new application",
+                "parameters": [
+                    {
+                        "description": "Application to create",
+                        "name": "application",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ApplicationRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApplicationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/attach-policy": {
+            "post": {
+                "description": "Attaches a policy to an application using the provided application and issuer DID, and schema ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authorization Management"
+                ],
+                "summary": "Attach policy to application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Application Policy Request",
+                        "name": "appPolicy",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ApplicationPolicyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully attached policy",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApplicationPolicyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth-provider": {
+            "get": {
+                "description": "Retrieves a list of all auth providers",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication Management"
+                ],
+                "summary": "Get available auth providers",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.AvailableProvider"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth-provider/link": {
+            "post": {
+                "description": "Links an OAuth provider to an application by its DID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication Management"
+                ],
+                "summary": "Link Authentication Provider",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Authentication Provider Details",
+                        "name": "provider",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AuthProvider"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully linked provider",
+                        "schema": {
+                            "$ref": "#/definitions/models.AuthProvider"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth-provider/unlink": {
+            "post": {
+                "description": "Links an OAuth provider to an application by its DID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication Management"
+                ],
+                "summary": "UnLink Authentication Provider",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Authentication Provider Details",
+                        "name": "provider",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully linked provider",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/create-policy": {
+            "post": {
+                "description": "Creates a new policy based on the provided schema",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authorization Management"
+                ],
+                "summary": "Create a new policy",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Policy Schema",
+                        "name": "schema",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PolicySchemaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created policy",
+                        "schema": {
+                            "$ref": "#/definitions/models.PolicySchemaResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/get-access-list": {
+            "get": {
+                "description": "List the access for the user on the resource.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Get Access list on the resource",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer YOUR_ACCESS_TOKEN",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application DID",
+                        "name": "app_did",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application Secret",
+                        "name": "app_secret",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/get-access-token": {
+            "post": {
+                "description": "Handles the sign-in process using application DID, credential JWT.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Sign in or get access token to an application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application DID",
+                        "name": "app_did",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application secret",
+                        "name": "app_secret",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Application to create",
+                        "name": "application",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.IssueOAuthCredential"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Access Token",
+                        "schema": {
+                            "$ref": "#/definitions/models.GetAccessTokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/grant-access": {
+            "put": {
+                "description": "Grants access based on a valid request.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permission Management"
+                ],
+                "summary": "Grant access to a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application DID",
+                        "name": "app_did",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application secret",
+                        "name": "app_secret",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "implementation pending",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Only PUT method is allowed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/policies": {
+            "get": {
+                "description": "Retrieves a list of all policies",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authorization Management"
+                ],
+                "summary": "Get all policies",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.PolicySchemaResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/request-access": {
+            "post": {
+                "description": "Initiates a request for user access.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Request access for a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application DID",
+                        "name": "app_did",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application secret",
+                        "name": "app_secret",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "implementation pending",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Only POST method is allowed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/revoke-access": {
+            "put": {
+                "description": "Revokes the access of a user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Permission Management"
+                ],
+                "summary": "Revoke access of a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application DID",
+                        "name": "app_did",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application secret",
+                        "name": "app_secret",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "implementation pending",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Only PUT method is allowed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/revoke-credential": {
+            "post": {
+                "description": "Revoke an existing OAuth credential.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication Management"
+                ],
+                "summary": "Revoke OAuth Credential",
+                "parameters": [
+                    {
+                        "description": "Revoke Credential Request",
+                        "name": "revokeOAuthCredentialRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Credential successfully revoked",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/signup": {
+            "get": {
+                "description": "Handles the sign-up process by providing a redirect URL for authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Sign up for an application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Application DID",
+                        "name": "app_did",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application secret",
+                        "name": "app_secret",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Redirect URL for sign-up",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/verify-access": {
+            "get": {
+                "description": "Verifies if a user has access to a specific resource based on their role.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Access Management"
+                ],
+                "summary": "Verify access to a resource",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer YOUR_ACCESS_TOKEN",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application DID",
+                        "name": "app_did",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Application Secret",
+                        "name": "app_secret",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "e.g.; Role to check access for",
+                        "name": "attribute",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.AppDetails": {
+            "type": "object",
+            "required": [
+                "description",
+                "email"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "maxLength": 500,
+                    "minLength": 10
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ApplicationPolicyRequest": {
+            "type": "object",
+            "required": [
+                "application_did",
+                "credential",
+                "issuer_did",
+                "schema_id"
+            ],
+            "properties": {
+                "application_did": {
+                    "type": "string"
+                },
+                "credential": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "issuer_did": {
+                    "type": "string"
+                },
+                "schema_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ApplicationPolicyResponse": {
+            "type": "object",
+            "properties": {
+                "application_did": {
+                    "type": "string"
+                },
+                "credential_id": {
+                    "type": "string"
+                },
+                "credential_subject": {},
+                "issuer_did": {
+                    "type": "string"
+                },
+                "schema_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ApplicationRequest": {
+            "type": "object",
+            "required": [
+                "app_details",
+                "app_name"
+            ],
+            "properties": {
+                "app_details": {
+                    "$ref": "#/definitions/models.AppDetails"
+                },
+                "app_name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "models.ApplicationResponse": {
+            "type": "object",
+            "properties": {
+                "app_details": {
+                    "$ref": "#/definitions/models.AppDetails"
+                },
+                "app_did": {
+                    "type": "string"
+                },
+                "app_name": {
+                    "type": "string"
+                },
+                "app_secret": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AuthProvider": {
+            "type": "object",
+            "required": [
+                "app_details",
+                "app_did",
+                "config"
+            ],
+            "properties": {
+                "app_details": {
+                    "$ref": "#/definitions/models.AvailableProvider"
+                },
+                "app_did": {
+                    "type": "string"
+                },
+                "config": {
+                    "$ref": "#/definitions/models.OAuthConfig"
+                }
+            }
+        },
+        "models.AvailableProvider": {
+            "type": "object",
+            "required": [
+                "provider_name",
+                "provider_protocol",
+                "provider_schema_id",
+                "provider_type"
+            ],
+            "properties": {
+                "provider_name": {
+                    "type": "string"
+                },
+                "provider_protocol": {
+                    "type": "string"
+                },
+                "provider_schema_id": {
+                    "type": "string"
+                },
+                "provider_type": {
+                    "description": "social, email, phone, etc",
+                    "type": "string"
+                }
+            }
+        },
+        "models.GetAccessTokenResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.IssueOAuthCredential": {
+            "type": "object",
+            "required": [
+                "oauth_credential",
+                "policy_credential"
+            ],
+            "properties": {
+                "oauth_credential": {},
+                "policy_credential": {}
+            }
+        },
+        "models.JsonSchema": {
+            "type": "object",
+            "properties": {
+                "$schema": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "required": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.OAuthConfig": {
+            "type": "object",
+            "properties": {
+                "client_id": {
+                    "type": "string"
+                },
+                "redirect_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.PolicySchemaRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "schema": {
+                    "$ref": "#/definitions/models.JsonSchema"
+                }
+            }
+        },
+        "models.PolicySchemaResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "schema": {
+                    "$ref": "#/definitions/models.JsonSchema"
+                }
+            }
+        }
+    }
+}

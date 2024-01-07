@@ -1,0 +1,694 @@
+definitions:
+  models.AppDetails:
+    properties:
+      description:
+        maxLength: 500
+        minLength: 10
+        type: string
+      email:
+        type: string
+    required:
+    - description
+    - email
+    type: object
+  models.ApplicationPolicyRequest:
+    properties:
+      application_did:
+        type: string
+      credential:
+        additionalProperties: true
+        type: object
+      issuer_did:
+        type: string
+      schema_id:
+        type: string
+    required:
+    - application_did
+    - credential
+    - issuer_did
+    - schema_id
+    type: object
+  models.ApplicationPolicyResponse:
+    properties:
+      application_did:
+        type: string
+      credential_id:
+        type: string
+      credential_subject: {}
+      issuer_did:
+        type: string
+      schema_id:
+        type: string
+    type: object
+  models.ApplicationRequest:
+    properties:
+      app_details:
+        $ref: '#/definitions/models.AppDetails'
+      app_name:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - app_details
+    - app_name
+    type: object
+  models.ApplicationResponse:
+    properties:
+      app_details:
+        $ref: '#/definitions/models.AppDetails'
+      app_did:
+        type: string
+      app_name:
+        type: string
+      app_secret:
+        type: string
+    type: object
+  models.AuthProvider:
+    properties:
+      app_details:
+        $ref: '#/definitions/models.AvailableProvider'
+      app_did:
+        type: string
+      config:
+        $ref: '#/definitions/models.OAuthConfig'
+    required:
+    - app_details
+    - app_did
+    - config
+    type: object
+  models.AvailableProvider:
+    properties:
+      provider_name:
+        type: string
+      provider_protocol:
+        type: string
+      provider_schema_id:
+        type: string
+      provider_type:
+        description: social, email, phone, etc
+        type: string
+    required:
+    - provider_name
+    - provider_protocol
+    - provider_schema_id
+    - provider_type
+    type: object
+  models.GetAccessTokenResponse:
+    properties:
+      access_token:
+        type: string
+    type: object
+  models.IssueOAuthCredential:
+    properties:
+      oauth_credential: {}
+      policy_credential: {}
+    required:
+    - oauth_credential
+    - policy_credential
+    type: object
+  models.JsonSchema:
+    properties:
+      $schema:
+        type: string
+      properties:
+        additionalProperties: true
+        type: object
+      required:
+        items:
+          type: string
+        type: array
+      type:
+        type: string
+    type: object
+  models.OAuthConfig:
+    properties:
+      client_id:
+        type: string
+      redirect_url:
+        type: string
+    type: object
+  models.PolicySchemaRequest:
+    properties:
+      name:
+        type: string
+      schema:
+        $ref: '#/definitions/models.JsonSchema'
+    type: object
+  models.PolicySchemaResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      schema:
+        $ref: '#/definitions/models.JsonSchema'
+    type: object
+info:
+  contact: {}
+paths:
+  /applications:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all applications
+      parameters:
+      - description: API Key
+        in: header
+        name: x-api-key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ApplicationResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all applications
+      tags:
+      - Application Management
+    post:
+      consumes:
+      - application/json
+      description: Create a new application with the given details
+      parameters:
+      - description: Application to create
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/models.ApplicationRequest'
+      - description: API Key
+        in: header
+        name: x-api-key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ApplicationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a new application
+      tags:
+      - Application Management
+  /attach-policy:
+    post:
+      consumes:
+      - application/json
+      description: Attaches a policy to an application using the provided application
+        and issuer DID, and schema ID
+      parameters:
+      - description: API Key
+        in: header
+        name: x-api-key
+        required: true
+        type: string
+      - description: Application Policy Request
+        in: body
+        name: appPolicy
+        required: true
+        schema:
+          $ref: '#/definitions/models.ApplicationPolicyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully attached policy
+          schema:
+            $ref: '#/definitions/models.ApplicationPolicyResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Attach policy to application
+      tags:
+      - Authorization Management
+  /auth-provider:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all auth providers
+      parameters:
+      - description: API Key
+        in: header
+        name: x-api-key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.AvailableProvider'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get available auth providers
+      tags:
+      - Authentication Management
+  /auth-provider/link:
+    post:
+      consumes:
+      - application/json
+      description: Links an OAuth provider to an application by its DID
+      parameters:
+      - description: API Key
+        in: header
+        name: x-api-key
+        required: true
+        type: string
+      - description: Authentication Provider Details
+        in: body
+        name: provider
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthProvider'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully linked provider
+          schema:
+            $ref: '#/definitions/models.AuthProvider'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Link Authentication Provider
+      tags:
+      - Authentication Management
+  /auth-provider/unlink:
+    post:
+      consumes:
+      - application/json
+      description: Links an OAuth provider to an application by its DID
+      parameters:
+      - description: API Key
+        in: header
+        name: x-api-key
+        required: true
+        type: string
+      - description: Authentication Provider Details
+        in: body
+        name: provider
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully linked provider
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: UnLink Authentication Provider
+      tags:
+      - Authentication Management
+  /create-policy:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new policy based on the provided schema
+      parameters:
+      - description: API Key
+        in: header
+        name: x-api-key
+        required: true
+        type: string
+      - description: Policy Schema
+        in: body
+        name: schema
+        required: true
+        schema:
+          $ref: '#/definitions/models.PolicySchemaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created policy
+          schema:
+            $ref: '#/definitions/models.PolicySchemaResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a new policy
+      tags:
+      - Authorization Management
+  /get-access-list:
+    get:
+      consumes:
+      - application/json
+      description: List the access for the user on the resource.
+      parameters:
+      - default: Bearer YOUR_ACCESS_TOKEN
+        description: Authorization token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application Secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get Access list on the resource
+      tags:
+      - User Access Management
+  /get-access-token:
+    post:
+      consumes:
+      - application/json
+      description: Handles the sign-in process using application DID, credential JWT.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
+      - description: Application to create
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/models.IssueOAuthCredential'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Access Token
+          schema:
+            $ref: '#/definitions/models.GetAccessTokenResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Sign in or get access token to an application
+      tags:
+      - User Access Management
+  /grant-access:
+    put:
+      consumes:
+      - application/json
+      description: Grants access based on a valid request.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: implementation pending
+          schema:
+            type: string
+        "405":
+          description: Only PUT method is allowed
+          schema:
+            type: string
+      summary: Grant access to a user
+      tags:
+      - Permission Management
+  /policies:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all policies
+      parameters:
+      - description: API Key
+        in: header
+        name: x-api-key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.PolicySchemaResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all policies
+      tags:
+      - Authorization Management
+  /request-access:
+    post:
+      consumes:
+      - application/json
+      description: Initiates a request for user access.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: implementation pending
+          schema:
+            type: string
+        "405":
+          description: Only POST method is allowed
+          schema:
+            type: string
+      summary: Request access for a user
+      tags:
+      - User Access Management
+  /revoke-access:
+    put:
+      consumes:
+      - application/json
+      description: Revokes the access of a user.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: implementation pending
+          schema:
+            type: string
+        "405":
+          description: Only PUT method is allowed
+          schema:
+            type: string
+      summary: Revoke access of a user
+      tags:
+      - Permission Management
+  /revoke-credential:
+    post:
+      consumes:
+      - application/json
+      description: Revoke an existing OAuth credential.
+      parameters:
+      - description: Revoke Credential Request
+        in: body
+        name: revokeOAuthCredentialRequest
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Credential successfully revoked
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Revoke OAuth Credential
+      tags:
+      - Authentication Management
+  /signup:
+    get:
+      consumes:
+      - application/json
+      description: Handles the sign-up process by providing a redirect URL for authentication.
+      parameters:
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Redirect URL for sign-up
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Sign up for an application
+      tags:
+      - User Access Management
+  /verify-access:
+    get:
+      consumes:
+      - application/json
+      description: Verifies if a user has access to a specific resource based on their
+        role.
+      parameters:
+      - default: Bearer YOUR_ACCESS_TOKEN
+        description: Authorization token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Application DID
+        in: query
+        name: app_did
+        required: true
+        type: string
+      - description: Application Secret
+        in: query
+        name: app_secret
+        required: true
+        type: string
+      - description: e.g.; Role to check access for
+        in: query
+        name: attribute
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Verify access to a resource
+      tags:
+      - User Access Management
+swagger: "2.0"

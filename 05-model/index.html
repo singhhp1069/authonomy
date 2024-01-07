@@ -1,0 +1,1106 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://singhhp1069.github.io/authonomy/05-model/">
+      
+      
+        <link rel="prev" href="../03-cmd/">
+      
+      
+        <link rel="next" href="../05-token/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.3.1">
+    
+    
+      
+        <title>Service Models - Authonomy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.046329b4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.85d0ee34.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap:300,300i,400,400i,700,700i%7CShare+Tech+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Asap";--md-code-font:"Share Tech Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#service-models" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Authonomy" class="md-header__button md-logo" aria-label="Authonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Authonomy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Service Models
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/singhhp1069/authonomy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Authonomy" class="md-nav__button md-logo" aria-label="Authonomy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Authonomy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/singhhp1069/authonomy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authonomy: Revolutionizing Authorization Management for Developers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-cmd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command-Line Interface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Service Models
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Service Models
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    Models
+  </a>
+  
+    <nav class="md-nav" aria-label="Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#applicationrequest" class="md-nav__link">
+    ApplicationRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#appdetails" class="md-nav__link">
+    AppDetails
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applicationresponse" class="md-nav__link">
+    ApplicationResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#didcreationresponse" class="md-nav__link">
+    DidCreationResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policyschemaresponse" class="md-nav__link">
+    PolicySchemaResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policyschemarequest" class="md-nav__link">
+    PolicySchemaRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jsonschema" class="md-nav__link">
+    JsonSchema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applicationpolicyrequest" class="md-nav__link">
+    ApplicationPolicyRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applicationpolicyresponse" class="md-nav__link">
+    ApplicationPolicyResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credentialrequest" class="md-nav__link">
+    CredentialRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credentialresponse" class="md-nav__link">
+    CredentialResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authprovider" class="md-nav__link">
+    AuthProvider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#availableprovider" class="md-nav__link">
+    AvailableProvider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oauthconfig" class="md-nav__link">
+    OAuthConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#providerschema" class="md-nav__link">
+    ProviderSchema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issueoauthcredentialrequest" class="md-nav__link">
+    IssueOAuthCredentialRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issueoauthcredential" class="md-nav__link">
+    IssueOAuthCredential
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#userinfo" class="md-nav__link">
+    UserInfo
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getaccesstokenresponse" class="md-nav__link">
+    GetAccessTokenResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifyaccessrequest" class="md-nav__link">
+    VerifyAccessRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifyaccessresponse" class="md-nav__link">
+    VerifyAccessResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rbac" class="md-nav__link">
+    RBAC
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#role" class="md-nav__link">
+    Role
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roleswrapper" class="md-nav__link">
+    RolesWrapper
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accesslist" class="md-nav__link">
+    AccessList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helper-functions" class="md-nav__link">
+    Helper Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Helper Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#structtomap" class="md-nav__link">
+    StructToMap
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-token/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Access Token Generation and Validation Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-handlers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Service Handlers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-service/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Function
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Supported Policy Schemas and Authentication Methods
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    Models
+  </a>
+  
+    <nav class="md-nav" aria-label="Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#applicationrequest" class="md-nav__link">
+    ApplicationRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#appdetails" class="md-nav__link">
+    AppDetails
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applicationresponse" class="md-nav__link">
+    ApplicationResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#didcreationresponse" class="md-nav__link">
+    DidCreationResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policyschemaresponse" class="md-nav__link">
+    PolicySchemaResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policyschemarequest" class="md-nav__link">
+    PolicySchemaRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jsonschema" class="md-nav__link">
+    JsonSchema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applicationpolicyrequest" class="md-nav__link">
+    ApplicationPolicyRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applicationpolicyresponse" class="md-nav__link">
+    ApplicationPolicyResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credentialrequest" class="md-nav__link">
+    CredentialRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credentialresponse" class="md-nav__link">
+    CredentialResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authprovider" class="md-nav__link">
+    AuthProvider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#availableprovider" class="md-nav__link">
+    AvailableProvider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oauthconfig" class="md-nav__link">
+    OAuthConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#providerschema" class="md-nav__link">
+    ProviderSchema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issueoauthcredentialrequest" class="md-nav__link">
+    IssueOAuthCredentialRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issueoauthcredential" class="md-nav__link">
+    IssueOAuthCredential
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#userinfo" class="md-nav__link">
+    UserInfo
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getaccesstokenresponse" class="md-nav__link">
+    GetAccessTokenResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifyaccessrequest" class="md-nav__link">
+    VerifyAccessRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifyaccessresponse" class="md-nav__link">
+    VerifyAccessResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rbac" class="md-nav__link">
+    RBAC
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#role" class="md-nav__link">
+    Role
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roleswrapper" class="md-nav__link">
+    RolesWrapper
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accesslist" class="md-nav__link">
+    AccessList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helper-functions" class="md-nav__link">
+    Helper Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Helper Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#structtomap" class="md-nav__link">
+    StructToMap
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="service-models">Service Models</h1>
+<h2 id="overview">Overview</h2>
+<p>The <code>models</code> package defines the data structures used in the Authonomy service. These models are used for managing and interacting with applications, policies, credentials, authentication providers, and user information.</p>
+<h2 id="models">Models</h2>
+<h3 id="applicationrequest">ApplicationRequest</h3>
+<p>Represents a request to create a new application.</p>
+<ul>
+<li><code>AppName</code>: Name of the application.</li>
+<li><code>AppDetails</code>: Details of the application including description and contact email.</li>
+</ul>
+<h3 id="appdetails">AppDetails</h3>
+<p>Contains details about an application.</p>
+<ul>
+<li><code>Description</code>: Description of the application.</li>
+<li><code>ContactEmail</code>: Contact email address.</li>
+</ul>
+<h3 id="applicationresponse">ApplicationResponse</h3>
+<p>Response structure for application creation or query.</p>
+<ul>
+<li><code>AppDID</code>: Application DID.</li>
+<li><code>AppSceret</code>: Application secret.</li>
+<li><code>AppName</code>: Application name.</li>
+<li><code>AppDetails</code>: Application details.</li>
+</ul>
+<h3 id="didcreationresponse">DidCreationResponse</h3>
+<p>Response for DID creation.</p>
+<ul>
+<li><code>Did</code>: DID document.</li>
+</ul>
+<h3 id="policyschemaresponse">PolicySchemaResponse</h3>
+<p>Response structure for policy schema queries.</p>
+<ul>
+<li><code>ID</code>: Schema ID.</li>
+<li><code>Name</code>: Schema name.</li>
+<li><code>Schema</code>: JSON schema.</li>
+</ul>
+<h3 id="policyschemarequest">PolicySchemaRequest</h3>
+<p>Request structure for creating a policy schema.</p>
+<ul>
+<li><code>Name</code>: Schema name.</li>
+<li><code>Schema</code>: JSON schema.</li>
+</ul>
+<h3 id="jsonschema">JsonSchema</h3>
+<p>Defines a JSON schema.</p>
+<ul>
+<li><code>DollarSchema</code>: Schema definition.</li>
+<li><code>Type</code>: Type of the schema.</li>
+<li><code>Properties</code>: Schema properties.</li>
+<li><code>Required</code>: Required fields.</li>
+</ul>
+<h3 id="applicationpolicyrequest">ApplicationPolicyRequest</h3>
+<p>Request for creating an application policy.</p>
+<ul>
+<li><code>ApplicationDID</code>: Application DID.</li>
+<li><code>SchemaID</code>: Schema ID.</li>
+<li><code>IssuerDID</code>: Issuer DID.</li>
+<li><code>Credential</code>: Credential data.</li>
+</ul>
+<h3 id="applicationpolicyresponse">ApplicationPolicyResponse</h3>
+<p>Response for application policy queries.</p>
+<ul>
+<li><code>ApplicationDID</code>: Application DID.</li>
+<li><code>SchemaID</code>: Schema ID.</li>
+<li><code>IssuerDID</code>: Issuer DID.</li>
+<li><code>CredentialID</code>: Credential ID.</li>
+<li><code>CredentialSubject</code>: Credential subject.</li>
+</ul>
+<h3 id="credentialrequest">CredentialRequest</h3>
+<p>Request for creating a credential.</p>
+<ul>
+<li><code>Issuer</code>: Issuer DID.</li>
+<li><code>VerificationMethodID</code>: Verification method ID.</li>
+<li><code>Subject</code>: Subject DID.</li>
+<li><code>SchemaID</code>: Schema ID.</li>
+<li><code>Data</code>: Credential data.</li>
+</ul>
+<h3 id="credentialresponse">CredentialResponse</h3>
+<p>Response for credential queries.</p>
+<ul>
+<li><code>ID</code>: Credential ID.</li>
+<li><code>FullyQualifiedVerificationMethodID</code>: Verification method ID.</li>
+<li><code>Credential</code>: Verifiable credential.</li>
+<li><code>CredentialJwt</code>: Credential JWT.</li>
+</ul>
+<h3 id="authprovider">AuthProvider</h3>
+<p>Represents an authentication provider.</p>
+<ul>
+<li><code>AppDID</code>: Application DID.</li>
+<li><code>Provider</code>: Available provider.</li>
+<li><code>Config</code>: OAuth configuration.</li>
+</ul>
+<h3 id="availableprovider">AvailableProvider</h3>
+<p>Details of an available authentication provider.</p>
+<ul>
+<li><code>ProviderName</code>: Provider name.</li>
+<li><code>ProviderType</code>: Provider type.</li>
+<li><code>ProviderProtocol</code>: Provider protocol.</li>
+<li><code>ProviderSchemaID</code>: Schema ID.</li>
+</ul>
+<h3 id="oauthconfig">OAuthConfig</h3>
+<p>Configuration for OAuth authentication.</p>
+<ul>
+<li><code>ClientID</code>: Client ID.</li>
+<li><code>RedirectURL</code>: Redirect URL.</li>
+</ul>
+<h3 id="providerschema">ProviderSchema</h3>
+<p>Schema for an authentication provider.</p>
+<ul>
+<li><code>ProviderName</code>: Provider name.</li>
+<li><code>SchemaID</code>: Schema ID.</li>
+</ul>
+<h3 id="issueoauthcredentialrequest">IssueOAuthCredentialRequest</h3>
+<p>Request for issuing OAuth credentials.</p>
+<ul>
+<li><code>AppDID</code>: Application DID.</li>
+<li><code>Provider</code>: Provider name.</li>
+<li><code>AccessToken</code>: Access token.</li>
+<li><code>UserDID</code>: User DID.</li>
+</ul>
+<h3 id="issueoauthcredential">IssueOAuthCredential</h3>
+<p>Represents OAuth and policy credentials.</p>
+<ul>
+<li><code>OAuthCredential</code>: OAuth credential.</li>
+<li><code>PolicyCredential</code>: Policy credential.</li>
+</ul>
+<h3 id="userinfo">UserInfo</h3>
+<p>User information.</p>
+<ul>
+<li><code>UserID</code>: User ID.</li>
+<li><code>Name</code>: User name.</li>
+<li><code>Email</code>: User email.</li>
+</ul>
+<h3 id="getaccesstokenresponse">GetAccessTokenResponse</h3>
+<p>Response for access token queries.</p>
+<ul>
+<li><code>AccessToken</code>: Access token.</li>
+</ul>
+<h3 id="verifyaccessrequest">VerifyAccessRequest</h3>
+<p>Request for verifying access.</p>
+<ul>
+<li><code>CredentialJWT</code>: Credential JWT.</li>
+</ul>
+<h3 id="verifyaccessresponse">VerifyAccessResponse</h3>
+<p>Response for access verification.</p>
+<ul>
+<li><code>Status</code>: Verification status.</li>
+</ul>
+<h3 id="rbac">RBAC</h3>
+<p>Role-based access control structure.</p>
+<ul>
+<li><code>ID</code>: ID.</li>
+<li><code>Roles</code>: Roles.</li>
+</ul>
+<h3 id="role">Role</h3>
+<p>Role structure.</p>
+<ul>
+<li><code>RoleName</code>: Role name.</li>
+<li><code>Permissions</code>: Permissions.</li>
+</ul>
+<h3 id="roleswrapper">RolesWrapper</h3>
+<p>Wrapper for roles.</p>
+<ul>
+<li><code>Roles</code>: Roles.</li>
+</ul>
+<h3 id="accesslist">AccessList</h3>
+<p>Structure for access lists.</p>
+<ul>
+<li><code>ApplicationPolicy</code>: Application policy.</li>
+<li><code>UserAccessList</code>: User access list.</li>
+</ul>
+<h3 id="helper-functions">Helper Functions</h3>
+<h4 id="structtomap">StructToMap</h4>
+<p>Converts a struct to a map.</p>
+<ul>
+<li><code>data</code>: Struct to convert.</li>
+<li><code>return</code>: Map and error.</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>These models are used throughout the Authonomy service for handling requests and responses in various operations like managing applications, policies, and credentials.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.instant", "navigation.tracking"], "search": "../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.dff1b7c8.min.js"></script>
+      
+    
+  </body>
+</html>
