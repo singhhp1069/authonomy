@@ -57,6 +57,11 @@ As a developer the further steps:
 3. Attach policy to the application (e.g., RBAC schema policy)
 4. Now you are ready to use it on application.
 
+### SDK and Demo
+
+- sdk can be found here [sdk](https://github.com/singhhp1069/authonomy-sdk-js)
+- demo repository can be found here [demo](https://github.com/singhhp1069/authonomy-demo)
+
 Complete demo video is:
 
 TODO:: video link

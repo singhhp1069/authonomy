@@ -3,10 +3,6 @@ site_url: https://singhhp1069.github.io/authonomy/
 repo_url: https://github.com/singhhp1069/authonomy
 theme:
   name: material
-  features:
-    - navigation.sections
-    - navigation.instant
-    - navigation.tracking
   palette:
     primary: black
   font:
